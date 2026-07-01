@@ -1,3 +1,10 @@
+<img src="./assets/github-preview.png" alt="OI Laravel Notes" width="100%" />
+
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/oi-lab/oi-laravel-publish.svg)](https://packagist.org/packages/oi-lab/oi-laravel-publish)
+[![Total Downloads](https://img.shields.io/packagist/dt/oi-lab/oi-laravel-publish.svg)](https://packagist.org/packages/oi-lab/oi-laravel-publish)
+[![Tests](https://img.shields.io/github/actions/workflow/status/oi-lab/oi-laravel-publish/tests.yml?label=tests)](https://github.com/oi-lab/oi-laravel-publish/actions)
+[![License](https://img.shields.io/github/license/oi-lab/oi-laravel-publish)](LICENSE)
+
 # OI Laravel Publish
 
 Recursive CMS pages with ordered blocks, code-defined templates,
@@ -133,10 +140,27 @@ This package ships an AI assistant skill. Install it into a host app with:
 php artisan oi:install-ai-skill
 ```
 
+## Testing
+
+```bash
+composer test
+```
+
 ## License
 
-The MIT License (MIT). See [LICENSE](LICENSE).
+The MIT License (MIT). Please see the [License File](LICENSE) for more information.
 
 ## Credits
 
-- [Olivier Lacombe](mailto:olivier@olacombe.com)
+**[Olivier Lacombe](https://www.olacombe.com)** - Creator and maintainer
+
+Olivier is a Product & Technology Director based in Montpellier, France, with over 20 years of experience innovating in UX/UI and emerging technologies. He specializes in guiding enterprises toward cutting-edge digital solutions, combining user-centered design with continuous optimization and artificial intelligence integration.
+
+**Projects & Resources:**
+- [OI Dev Docs](https://dev.olacombe.com) - Documentation for all Open Source OI Lab packages
+- [OnAI](https://onai.olacombe.com) - Training courses and masterclasses on generative AI for businesses
+- [Promptr](https://promptr.olacombe.com) - Prompt engineering Management Platform
+
+## Support
+
+For support, please open an issue on the [GitHub repository](https://github.com/oi-lab/oi-laravel-attachments/issues).
