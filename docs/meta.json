@@ -1,0 +1,7 @@
+{
+    "type": "package",
+    "name": "oi-lab/oi-laravel-publish",
+    "title": "OI Laravel Publish",
+    "description": "Recursive CMS pages with ordered blocks, code-defined templates, typed props and attachments",
+    "order": 100
+}
