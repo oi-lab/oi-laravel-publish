@@ -84,6 +84,11 @@ return [
     |
     */
     'settings' => [
+        // Explicit SettingStore implementation (class-string). Leave null to
+        // auto-detect: the oi-lab/oi-laravel-settings adapter is used when that
+        // package is installed, otherwise the generic key/value model below.
+        'store' => env('OI_PUBLISH_SETTING_STORE'),
+
         'model' => 'App\\Models\\Setting',
         'key_column' => 'key',
         'value_column' => 'value',

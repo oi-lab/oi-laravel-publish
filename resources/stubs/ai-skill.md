@@ -117,14 +117,20 @@ to store and attach uploads in one step.
 
 ## Settings
 
-When the host exposes a key/value `Setting` model, run `php artisan
-publish:install-settings` to seed:
+Settings are read/written through a pluggable `OiLab\OiLaravelPublish\Contracts\SettingStore`.
+Resolution order: explicit `config('oi-laravel-publish.settings.store')` class →
+`oi-lab/oi-laravel-settings` adapter when that package is installed (recommended,
+auto-wired, listed under `suggest`) → generic key/value `Setting` model
+(`settings.model`) → no-op. `SettingResolver` / `SettingsInstaller` are thin façades
+over the resolved store.
+
+Run `php artisan publish:install-settings` to seed:
 
 - `PUBLISH.PAGE_DESCRIPTION_RENDERER` (default `markdown`)
 - `PUBLISH.BLOCK_DESCRIPTION_RENDERER` (default `markdown`)
 
 Everything no-ops gracefully and falls back to `config('oi-laravel-publish.renderers')`
-when no Setting model is present.
+when no store is available.
 
 ## Conventions
 
@@ -135,7 +141,8 @@ when no Setting model is present.
   interfaces (`IHeroData`, ...), and `IPublishBlockData.props` as their union.
 - Resolve models/templates through `OiLaravelPublish`, never hardcode `::class`.
 - Override the `models`, `templates`, `attachments`, `renderers` and `settings`
-  config to customise behaviour.
+  config to customise behaviour. Install `oi-lab/oi-laravel-settings` for
+  zero-config, scoped/typed settings storage.
 
 ---
 

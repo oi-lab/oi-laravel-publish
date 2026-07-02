@@ -40,12 +40,18 @@ Optionally publish the configuration (to customise templates, models, renderers)
 php artisan vendor:publish --tag=oi-laravel-publish-config
 ```
 
-If your application exposes a key/value `Setting` model, seed the renderer
-settings:
+Seed the renderer settings into your settings backend:
 
 ```bash
 php artisan publish:install-settings
 ```
+
+Settings are read and written through a pluggable `SettingStore`. Install the
+recommended [`oi-lab/oi-laravel-settings`](https://packagist.org/packages/oi-lab/oi-laravel-settings)
+(listed under `suggest`) and it is wired automatically — no config needed.
+Without it, the package falls back to a generic key/value `Setting` model
+(`config('oi-laravel-publish.settings')`) or no-ops gracefully. See
+[Advanced → Settings](docs/advanced/settings.md).
 
 ## Concepts
 

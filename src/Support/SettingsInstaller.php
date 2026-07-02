@@ -2,33 +2,21 @@
 
 namespace OiLab\OiLaravelPublish\Support;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Schema;
-use Throwable;
+use OiLab\OiLaravelPublish\Contracts\SettingStore;
 
 /**
  * SettingsInstaller
  *
  * Seeds the package's default publish settings (the description renderer keys)
- * into the host application's key/value Setting model. Idempotent: existing keys
- * are left untouched and the installer no-ops gracefully when no Setting model
- * is present.
+ * through the active {@see SettingStore}.
+ * Idempotent: existing keys are left untouched and the installer no-ops
+ * gracefully when no settings store is available.
  */
 class SettingsInstaller
 {
     public function canInstall(): bool
     {
-        $model = $this->modelClass();
-
-        if ($model === null || ! class_exists($model)) {
-            return false;
-        }
-
-        try {
-            return Schema::hasTable((new $model)->getTable());
-        } catch (Throwable) {
-            return false;
-        }
+        return SettingStoreFactory::make()->isAvailable();
     }
 
     /**
@@ -36,13 +24,11 @@ class SettingsInstaller
      */
     public function install(): array
     {
-        if (! $this->canInstall()) {
+        $store = SettingStoreFactory::make();
+
+        if (! $store->isAvailable()) {
             return [];
         }
-
-        $model = $this->modelClass();
-        $keyColumn = config('oi-laravel-publish.settings.key_column', 'key');
-        $valueColumn = config('oi-laravel-publish.settings.value_column', 'value');
 
         /** @var array<string, string> $defaults */
         $defaults = config('oi-laravel-publish.settings.defaults', []);
@@ -50,26 +36,15 @@ class SettingsInstaller
         $created = [];
 
         foreach ($defaults as $key => $value) {
-            if ($model::query()->where($keyColumn, $key)->exists()) {
+            if ($store->has($key)) {
                 continue;
             }
 
-            $model::query()->create([
-                $keyColumn => $key,
-                $valueColumn => $value,
-            ]);
+            $store->set($key, (string) $value);
 
             $created[] = $key;
         }
 
         return $created;
-    }
-
-    /**
-     * @return class-string<Model>|null
-     */
-    protected function modelClass(): ?string
-    {
-        return config('oi-laravel-publish.settings.model');
     }
 }
