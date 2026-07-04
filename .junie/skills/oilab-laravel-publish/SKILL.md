@@ -27,7 +27,7 @@ views; the host application wires the UI (e.g. Inertia/React).
 - **PropsData** — abstract base for typed props. `GenericPropsData` is the
   permissive fallback; typed block props live in `Data/Blocks/*` (HeroData,
   FeaturesData, BlockquoteData, ContentData, FormData, SlidesData,
-  BreadcrumbData, MapData, TableData).
+  BreadcrumbData, MapData, TableData, WarrantyData).
 - **PropsCast** — casts the JSON `props` column to the typed `PropsData`
   subclass declared by the row's template, falling back to `GenericPropsData`.
 

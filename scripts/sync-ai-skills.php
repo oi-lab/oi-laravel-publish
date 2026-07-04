@@ -1,27 +1,41 @@
 <?php
 
 /**
- * Sync the canonical ai-skill.md stub to all AI assistant skill directories.
+ * Sync the canonical skill stubs to all AI assistant skill directories.
  * Run via: composer sync-ai-skills
  */
 $root = dirname(__DIR__);
-$stub = $root.'/resources/stubs/ai-skill.md';
 
-$targets = [
-    $root.'/.claude/skills/oilab-laravel-publish/SKILL.md',
-    $root.'/.junie/skills/oilab-laravel-publish/SKILL.md',
+$skills = [
+    'oilab-laravel-publish' => 'resources/stubs/ai-skill.md',
+    'oi-publish-add-block' => 'resources/stubs/add-block-skill.md',
 ];
 
-if (! is_file($stub)) {
-    fwrite(STDERR, "Stub not found: {$stub}".PHP_EOL);
-    exit(1);
+$assistants = ['.claude/skills', '.junie/skills'];
+
+$status = 0;
+
+foreach ($skills as $skill => $stubPath) {
+    $stub = $root.'/'.$stubPath;
+
+    if (! is_file($stub)) {
+        fwrite(STDERR, "Stub not found: {$stub}".PHP_EOL);
+        $status = 1;
+
+        continue;
+    }
+
+    foreach ($assistants as $assistant) {
+        $target = $root.'/'.$assistant.'/'.$skill.'/SKILL.md';
+        $dir = dirname($target);
+
+        if (! is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        copy($stub, $target);
+        echo 'Synced: '.str_replace($root.'/', '', $target).PHP_EOL;
+    }
 }
 
-foreach ($targets as $target) {
-    $dir = dirname($target);
-    if (! is_dir($dir)) {
-        mkdir($dir, 0755, true);
-    }
-    copy($stub, $target);
-    echo 'Synced: '.str_replace($root.'/', '', $target).PHP_EOL;
-}
+exit($status);

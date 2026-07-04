@@ -9,6 +9,7 @@ use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\MapData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
 use OiLab\OiLaravelPublish\Data\Blocks\TableData;
+use OiLab\OiLaravelPublish\Data\Blocks\WarrantyData;
 use OiLab\OiLaravelPublish\Enums\PublishTemplateType;
 use OiLab\OiLaravelPublish\Models\PublishBlock;
 use OiLab\OiLaravelPublish\Models\PublishPage;
@@ -129,7 +130,7 @@ return [
             'description' => 'A standard content page composed of ordered blocks.',
             'allowedBlocks' => [
                 'hero', 'features', 'content', 'blockquote', 'slides',
-                'form', 'breadcrumb', 'map', 'table',
+                'form', 'breadcrumb', 'map', 'table', 'warranty',
             ],
         ],
         [
@@ -209,6 +210,14 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A simple data table.',
             'propsClass' => TableData::class,
+        ],
+        [
+            'key' => 'warranty',
+            'name' => 'Warranty',
+            'type' => PublishTemplateType::Block->value,
+            'description' => 'An introduction with a cover image and a list of warranty items.',
+            'propsClass' => WarrantyData::class,
+            'props' => ['pre' => '', 'title' => '', 'overview' => ''],
         ],
     ],
 ];

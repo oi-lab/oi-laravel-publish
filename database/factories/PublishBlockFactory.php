@@ -53,6 +53,22 @@ class PublishBlockFactory extends Factory
         ]);
     }
 
+    public function warranty(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'template_key' => 'warranty',
+            'props' => [
+                'pre' => $this->faker->words(2, true),
+                'title' => $this->faker->sentence(),
+                'overview' => $this->faker->paragraph(),
+                'items' => [
+                    ['label' => $this->faker->words(2, true), 'description' => $this->faker->sentence()],
+                    ['label' => $this->faker->words(2, true), 'description' => null],
+                ],
+            ],
+        ]);
+    }
+
     public function template(string $key): static
     {
         return $this->state(fn (array $attributes): array => [

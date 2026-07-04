@@ -61,6 +61,11 @@
                     "path": "resources/stubs/ai-skill.md",
                     "rules": "resources/stubs/claude-rules.md",
                     "section": "oi-lab/oi-laravel-publish rules"
+                },
+                {
+                    "name": "oi-publish-add-block",
+                    "description": "Scaffold a new typed content block: PropsData class, template registration, allowedBlocks wiring, factory and tests",
+                    "path": "resources/stubs/add-block-skill.md"
                 }
             ]
         }
