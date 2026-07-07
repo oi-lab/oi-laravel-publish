@@ -2,6 +2,11 @@
 
 All notable changes to `oi-lab/oi-laravel-publish` will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Documentation: `docs/configuration/_index.md` was missing its YAML frontmatter, which dropped the page from the generated navigation and search index. Added `title`, `description`, and `order`.
+
 ## [1.0.0] - 2026-06-30
 
 ### Added
