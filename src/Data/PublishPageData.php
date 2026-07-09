@@ -2,8 +2,10 @@
 
 namespace OiLab\OiLaravelPublish\Data;
 
+use OiLab\OiLaravelAttachments\Data\AttachmentData;
 use OiLab\OiLaravelPublish\Models\PublishPage;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Optional;
 
 /**
  * PublishPageData
@@ -11,6 +13,10 @@ use Spatie\LaravelData\Data;
  * Serialisable representation of a {@see PublishPage}. `props` is the raw,
  * flattened props map (from the model's typed PropsData via `toProps()`), so the
  * DTO JSON is uniform regardless of whether the template declares a typed class.
+ *
+ * `cover` is an `Optional`: it appears in the JSON only when the relation was
+ * eager-loaded. An absent key therefore means "not loaded", where a null value
+ * means "loaded, and there is no cover".
  */
 class PublishPageData extends Data
 {
@@ -29,5 +35,35 @@ class PublishPageData extends Data
         public array $props,
         public int $sort = 0,
         public bool $is_active = true,
+        public AttachmentData|Optional|null $cover = new Optional,
     ) {}
+
+    /**
+     * Build the DTO from its model.
+     *
+     * The model's `props` is a typed {@see PropsData}, which the DTO carries as
+     * the raw map produced by `toProps()`. Without this factory,
+     * `PublishPageData::from($page)` hands that PropsData straight to the
+     * `array $props` parameter and dies with a TypeError.
+     *
+     * Declaring the model here also lets oi-laravel-ts pair the DTO with its
+     * model, which is what `data_replaces_model` introspects.
+     */
+    public static function fromModel(PublishPage $page): self
+    {
+        return new self(
+            id: $page->id,
+            uuid: $page->uuid,
+            parent_id: $page->parent_id,
+            template_key: $page->template_key,
+            name: $page->name,
+            slug: $page->slug,
+            excerpt: $page->excerpt,
+            description: $page->description,
+            props: $page->props->toProps(),
+            sort: $page->sort,
+            is_active: $page->is_active,
+            cover: $page->relationLoaded('cover') ? $page->cover?->toData() : new Optional,
+        );
+    }
 }

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OiLab\OiLaravelAttachments\Concerns\HasAttachments;
 use OiLab\OiLaravelAttachments\Concerns\HasCreatorAndUpdater;
 use OiLab\OiLaravelAttachments\Concerns\HasSortable;
+use OiLab\OiLaravelAttachments\Models\Attachment;
 use OiLab\OiLaravelPublish\Casts\PropsCast;
 use OiLab\OiLaravelPublish\Data\PropsData;
 use OiLab\OiLaravelPublish\Data\PublishPageData;
@@ -42,6 +43,7 @@ use OiLab\OiLaravelPublish\OiLaravelPublish;
  * @property-read PublishPage|null $parent
  * @property-read Collection<int, PublishPage> $children
  * @property-read Collection<int, PublishBlock> $blocks
+ * @property-read Attachment|null $cover
  */
 class PublishPage extends Model
 {
@@ -125,7 +127,7 @@ class PublishPage extends Model
     /**
      * The single `cover` attachment for this page.
      *
-     * @return MorphOne<Model, $this>
+     * @return MorphOne<Attachment, $this>
      */
     public function cover(): MorphOne
     {
@@ -142,18 +144,6 @@ class PublishPage extends Model
 
     public function toData(): PublishPageData
     {
-        return new PublishPageData(
-            id: $this->id,
-            uuid: $this->uuid,
-            parent_id: $this->parent_id,
-            template_key: $this->template_key,
-            name: $this->name,
-            slug: $this->slug,
-            excerpt: $this->excerpt,
-            description: $this->description,
-            props: $this->props->toProps(),
-            sort: $this->sort,
-            is_active: $this->is_active,
-        );
+        return PublishPageData::fromModel($this);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace OiLab\OiLaravelPublish\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OiLab\OiLaravelAttachments\Concerns\HasAttachments;
 use OiLab\OiLaravelAttachments\Concerns\HasCreatorAndUpdater;
 use OiLab\OiLaravelAttachments\Concerns\HasSortable;
+use OiLab\OiLaravelAttachments\Models\Attachment;
 use OiLab\OiLaravelPublish\Casts\PropsCast;
 use OiLab\OiLaravelPublish\Data\PropsData;
 use OiLab\OiLaravelPublish\Data\PublishBlockData;
@@ -39,6 +41,8 @@ use OiLab\OiLaravelPublish\OiLaravelPublish;
  * @property int $sort
  * @property bool $is_active
  * @property-read PublishPage $page
+ * @property-read Attachment|null $cover
+ * @property-read Collection<int, Attachment> $slides
  */
 class PublishBlock extends Model
 {
@@ -106,7 +110,7 @@ class PublishBlock extends Model
     /**
      * The single `cover` attachment for this block.
      *
-     * @return MorphOne<Model, $this>
+     * @return MorphOne<Attachment, $this>
      */
     public function cover(): MorphOne
     {
@@ -116,7 +120,7 @@ class PublishBlock extends Model
     /**
      * The ordered `slides` attachment collection for this block.
      *
-     * @return MorphMany<Model, $this>
+     * @return MorphMany<Attachment, $this>
      */
     public function slides(): MorphMany
     {
@@ -133,18 +137,6 @@ class PublishBlock extends Model
 
     public function toData(): PublishBlockData
     {
-        return new PublishBlockData(
-            id: $this->id,
-            uuid: $this->uuid,
-            publish_page_id: $this->publish_page_id,
-            template_key: $this->template_key,
-            name: $this->name,
-            key: $this->key,
-            excerpt: $this->excerpt,
-            description: $this->description,
-            props: $this->props->toProps(),
-            sort: $this->sort,
-            is_active: $this->is_active,
-        );
+        return PublishBlockData::fromModel($this);
     }
 }
