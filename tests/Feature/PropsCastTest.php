@@ -3,6 +3,7 @@
 use OiLab\OiLaravelPublish\Data\Blocks\ContentData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\GenericPropsData;
+use OiLab\OiLaravelPublish\Enums\HorizontalAlign;
 use OiLab\OiLaravelPublish\Models\PublishBlock;
 use OiLab\OiLaravelPublish\Models\PublishPage;
 
@@ -22,33 +23,43 @@ it('casts props to the typed class declared by the template', function () {
     $block->refresh();
 
     expect($block->props)->toBeInstanceOf(HeroData::class)
-        ->and($block->props->alignment)->toBe('center')
-        ->and($block->props->heading)->not->toBeNull();
+        ->and($block->props->pre)->not->toBeNull()
+        ->and($block->props->styles->title->align)->toBe(HorizontalAlign::Center);
 });
 
 it('persists a typed Data object assigned to props', function () {
     $page = PublishPage::factory()->create();
     $block = PublishBlock::factory()->forPage($page)->template('content')->create([
-        'props' => new ContentData(body: 'Hello world', format: 'markdown'),
+        'props' => new ContentData(format: 'html'),
     ]);
     $block->refresh();
 
     expect($block->props)->toBeInstanceOf(ContentData::class)
-        ->and($block->props->body)->toBe('Hello world')
-        ->and($block->props->format)->toBe('markdown');
+        ->and($block->props->format)->toBe('html');
 });
 
 it('round-trips raw props through the json column', function () {
     $page = PublishPage::factory()->create();
     $block = PublishBlock::factory()->forPage($page)->template('content')->create([
-        'props' => ['body' => 'Stored as array'],
+        'props' => ['format' => 'html'],
     ]);
 
     $stored = $block->getRawOriginal('props');
 
     expect($stored)->toBeString()
-        ->and(json_decode($stored, true))->toMatchArray(['body' => 'Stored as array']);
+        ->and(json_decode($stored, true))->toMatchArray(['format' => 'html']);
 
     $block->refresh();
-    expect($block->props->body)->toBe('Stored as array');
+    expect($block->props->format)->toBe('html');
+});
+
+it('keeps the block body in its column, never in props', function () {
+    $page = PublishPage::factory()->create();
+    $block = PublishBlock::factory()->forPage($page)->template('content')->create([
+        'description' => 'The rendered body',
+    ]);
+    $block->refresh();
+
+    expect($block->description)->toBe('The rendered body')
+        ->and($block->props->toProps())->not->toHaveKey('description');
 });

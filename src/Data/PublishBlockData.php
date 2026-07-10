@@ -27,6 +27,10 @@ use Spatie\LaravelData\Optional;
  * the `@param` union below makes oi-laravel-ts emit `props` as the union of the
  * typed block interfaces (`IHeroData | IFeaturesData | ...`).
  *
+ * `props` never carries content: the title, lead and body of a block are its
+ * `name`, `excerpt` and `description` here. Props hold what is specific to the
+ * template, plus the two cross-cutting keys `ctas` and `styles`.
+ *
  * That union carries no discriminant of its own, and its `array<string, mixed>`
  * member — the shape of a block whose template declares no typed props class —
  * widens to `Record<string, unknown>`, which absorbs every other member. The

@@ -2,31 +2,32 @@
 
 namespace OiLab\OiLaravelPublish\Data\Blocks;
 
+use OiLab\OiLaravelPublish\Data\CtaData;
 use OiLab\OiLaravelPublish\Data\PropsData;
+use OiLab\OiLaravelPublish\Data\Styles\WarrantyStylesData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\Max;
-use Spatie\LaravelData\Attributes\Validation\Required;
+use Spatie\LaravelData\Attributes\Validation\Nullable;
 
 /**
- * Props for a "warranty" block: an introduction plus a list of warranty items.
- * The illustration is supplied through the block's `cover` attachment
- * collection, not these props.
+ * Props for a "warranty" block: a list of warranty items.
  *
- * @property array<int, WarrantyItemData> $items
+ * The title and lead come from the block's `name` and `excerpt` columns. The
+ * illustration is supplied through the block's `cover` attachment collection.
  */
 class WarrantyData extends PropsData
 {
     /**
-     * @param  array<int, WarrantyItemData>  $items
+     * @param  WarrantyItemData[]  $items
+     * @param  CtaData[]  $ctas
      */
     public function __construct(
-        #[Required, Max(255)]
-        public string $pre,
-        #[Required, Max(255)]
-        public string $title,
-        #[Required]
-        public string $overview,
+        #[Nullable, Max(255)]
+        public ?string $pre = null,
         #[DataCollectionOf(WarrantyItemData::class)]
         public array $items = [],
+        #[DataCollectionOf(CtaData::class)]
+        public array $ctas = [],
+        public WarrantyStylesData $styles = new WarrantyStylesData,
     ) {}
 }

@@ -4,6 +4,7 @@ namespace OiLab\OiLaravelPublish;
 
 use Illuminate\Support\ServiceProvider;
 use OiLab\OiLaravelPublish\Console\Commands\InstallAiSkillCommand;
+use OiLab\OiLaravelPublish\Console\Commands\InstallDataCommand;
 use OiLab\OiLaravelPublish\Console\Commands\InstallSettingsCommand;
 use OiLab\OiLaravelPublish\Support\PublishTemplateRegistry;
 use OiLab\OiLaravelPublish\Support\SettingResolver;
@@ -33,6 +34,7 @@ class OiLaravelPublishServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallAiSkillCommand::class,
+                InstallDataCommand::class,
                 InstallSettingsCommand::class,
             ]);
 

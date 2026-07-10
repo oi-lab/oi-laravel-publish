@@ -2,7 +2,9 @@
 
 namespace OiLab\OiLaravelPublish\Data\Blocks;
 
+use OiLab\OiLaravelPublish\Data\CtaData;
 use OiLab\OiLaravelPublish\Data\PropsData;
+use OiLab\OiLaravelPublish\Data\Styles\SlidesStylesData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\Min;
 
@@ -11,12 +13,14 @@ use Spatie\LaravelData\Attributes\Validation\Min;
  * `slides` attachment collection; these props hold carousel behaviour and the
  * per-slide captions matched by position.
  *
- * @property array<int, SlideItemData> $items
+ * Autoplay, interval and loop are behaviour, not presentation — how many slides
+ * are visible at a breakpoint is a style, see `styles.carousel.per_view`.
  */
 class SlidesData extends PropsData
 {
     /**
-     * @param  array<int, SlideItemData>  $items
+     * @param  SlideItemData[]  $items
+     * @param  CtaData[]  $ctas
      */
     public function __construct(
         public bool $autoplay = false,
@@ -25,5 +29,8 @@ class SlidesData extends PropsData
         public bool $loop = true,
         #[DataCollectionOf(SlideItemData::class)]
         public array $items = [],
+        #[DataCollectionOf(CtaData::class)]
+        public array $ctas = [],
+        public SlidesStylesData $styles = new SlidesStylesData,
     ) {}
 }

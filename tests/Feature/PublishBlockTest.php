@@ -56,12 +56,10 @@ it('creates a warranty block with typed props and items', function () {
     expect($block->template_key)->toBe('warranty')
         ->and($block->props)->toBeInstanceOf(WarrantyData::class)
         ->and($block->props->pre)->toBeString()
-        ->and($block->props->title)->toBeString()
-        ->and($block->props->overview)->toBeString()
         ->and($block->props->items)->toHaveCount(2)
         ->and($block->props->items[0])->toBeInstanceOf(WarrantyItemData::class)
-        ->and($block->props->items[0]->label)->toBeString()
-        ->and($block->props->items[1]->description)->toBeNull();
+        ->and($block->props->items[0]->title)->toBeString()
+        ->and($block->props->items[1]->text)->toBeNull();
 });
 
 it('owns a cover image on a warranty block', function () {
@@ -80,9 +78,12 @@ it('converts to a data object', function () {
 
     $data = $block->toData();
 
+    $props = $data->toArray()['props'];
+
     expect($data->key)->toBe('hero')
         ->and($data->template_key)->toBe('hero')
         ->and($data->props)->toBeArray()
-        ->and($data->toArray()['props'])->toHaveKey('alignment')
-        ->and($data->toArray()['props']['alignment'])->toBe('center');
+        ->and($props)->toHaveKey('styles')
+        ->and($props['styles']['title']['align'])->toBe('center')
+        ->and($props['ctas'][0])->toHaveKeys(['label', 'url', 'target', 'variant', 'size', 'position']);
 });

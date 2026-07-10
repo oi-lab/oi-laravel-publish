@@ -14,8 +14,10 @@ class WarrantyItemData extends Data
 {
     public function __construct(
         #[Required, Max(255)]
-        public string $label,
+        public string $title,
         #[Nullable]
-        public ?string $description = null,
+        public ?string $text = null,
+        #[Nullable, Max(255)]
+        public ?string $icon = null,
     ) {}
 }

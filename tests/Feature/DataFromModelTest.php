@@ -44,7 +44,8 @@ describe('PublishBlockData::fromModel()', function () {
 
         expect($data->template_key)->toBe('hero')
             ->and($data->props)->toBeArray()
-            ->and($data->props)->toHaveKey('alignment');
+            ->and($data->props)->toHaveKeys(['pre', 'ctas', 'styles'])
+            ->and($data->props)->not->toHaveKey('title');
     });
 
     it('lets spatie build the DTO straight from the model without a TypeError', function () {

@@ -18,9 +18,10 @@ use OiLab\OiLaravelPublish\Models\PublishBlock;
 $hero = PublishBlock::create([
     'publish_page_id' => $page->id,
     'template_key'    => 'hero',
-    'name'            => 'Hero',
+    'name'            => 'Welcome',      // the rendered title
     'key'             => 'hero',
-    'props'           => ['heading' => 'Welcome', 'alignment' => 'center'],
+    'excerpt'         => 'A short lead.',
+    'props'           => ['pre' => 'New', 'styles' => ['title' => ['align' => 'center']]],
     'sort'            => 0,
 ]);
 ```
@@ -44,11 +45,11 @@ $block->template();       // PublishTemplateData
 
 | Field | Type | Notes |
 |-------|------|-------|
-| `name` | string | required |
+| `name` | string | required — the block's **rendered title** |
 | `key` | string | unique per `publish_page_id` |
-| `excerpt` | string? | short summary |
-| `description` | text? | rendered with the block renderer |
-| `props` | json | typed via [PropsCast](./props.md) |
+| `excerpt` | string? | the lead paragraph |
+| `description` | text? | the body, rendered with the block renderer |
+| `props` | json | template-specific fields, plus `ctas` and `styles` — never content. Typed via [PropsCast](./props.md) |
 | `template_key` | string | references a block [template](./templates.md) |
 | `publish_page_id` | int | owning page |
 | `sort` | int | ordering within the page |

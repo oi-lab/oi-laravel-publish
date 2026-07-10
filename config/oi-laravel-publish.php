@@ -148,7 +148,6 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'Full-width headline with call to action and cover image.',
             'propsClass' => HeroData::class,
-            'props' => ['alignment' => 'left'],
         ],
         [
             'key' => 'features',
@@ -156,7 +155,9 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A grid of features or selling points.',
             'propsClass' => FeaturesData::class,
-            'props' => ['columns' => 3],
+            // Seeds only what differs from the DTO defaults: one column on mobile,
+            // three from the `md` breakpoint up.
+            'props' => ['styles' => ['list' => ['columns' => ['base' => 1, 'md' => 3]]]],
         ],
         [
             'key' => 'blockquote',
@@ -171,7 +172,6 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'Free-form rich text rendered with the configured renderer.',
             'propsClass' => ContentData::class,
-            'props' => ['format' => 'markdown'],
         ],
         [
             'key' => 'form',
@@ -179,7 +179,6 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'Embeds a host-application form by key.',
             'propsClass' => FormData::class,
-            'props' => ['method' => 'post'],
         ],
         [
             'key' => 'slides',
@@ -187,7 +186,6 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A carousel backed by the `slides` attachment collection.',
             'propsClass' => SlidesData::class,
-            'props' => ['autoplay' => false, 'interval' => 5000, 'loop' => true],
         ],
         [
             'key' => 'breadcrumb',
@@ -202,7 +200,6 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A map centred on a coordinate.',
             'propsClass' => MapData::class,
-            'props' => ['zoom' => 12],
         ],
         [
             'key' => 'table',
@@ -217,7 +214,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'An introduction with a cover image and a list of warranty items.',
             'propsClass' => WarrantyData::class,
-            'props' => ['pre' => '', 'title' => '', 'overview' => ''],
+            'props' => ['pre' => ''],
         ],
     ],
 ];

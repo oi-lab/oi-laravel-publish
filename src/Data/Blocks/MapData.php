@@ -2,16 +2,24 @@
 
 namespace OiLab\OiLaravelPublish\Data\Blocks;
 
+use OiLab\OiLaravelPublish\Data\CtaData;
 use OiLab\OiLaravelPublish\Data\PropsData;
+use OiLab\OiLaravelPublish\Data\Styles\MapStylesData;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\Between;
 use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Attributes\Validation\Nullable;
 
 /**
- * Props for a "map" block.
+ * Props for a "map" block. `latitude`, `longitude` and `zoom` frame the view;
+ * every pin is a {@see MapMarkerData}.
  */
 class MapData extends PropsData
 {
+    /**
+     * @param  MapMarkerData[]  $markers
+     * @param  CtaData[]  $ctas
+     */
     public function __construct(
         #[Between(-90, 90)]
         public float $latitude = 0.0,
@@ -20,8 +28,11 @@ class MapData extends PropsData
         #[Between(0, 22)]
         public int $zoom = 12,
         #[Nullable, Max(255)]
-        public ?string $marker_label = null,
-        #[Nullable, Max(255)]
         public ?string $provider = null,
+        #[DataCollectionOf(MapMarkerData::class)]
+        public array $markers = [],
+        #[DataCollectionOf(CtaData::class)]
+        public array $ctas = [],
+        public MapStylesData $styles = new MapStylesData,
     ) {}
 }

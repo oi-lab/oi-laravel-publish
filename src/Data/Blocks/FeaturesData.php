@@ -2,28 +2,28 @@
 
 namespace OiLab\OiLaravelPublish\Data\Blocks;
 
+use OiLab\OiLaravelPublish\Data\CtaData;
 use OiLab\OiLaravelPublish\Data\PropsData;
+use OiLab\OiLaravelPublish\Data\Styles\FeaturesStylesData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
-use Spatie\LaravelData\Attributes\Validation\Max;
-use Spatie\LaravelData\Attributes\Validation\Min;
-use Spatie\LaravelData\Attributes\Validation\Nullable;
 
 /**
- * Props for a "features" block: an introduction plus a grid of feature items.
+ * Props for a "features" block: a grid of feature items.
+ *
+ * The title and lead come from the block's `name` and `excerpt` columns. The
+ * column count is a style, not content — see `styles.list.columns`.
  */
 class FeaturesData extends PropsData
 {
     /**
-     * @param  array<int, FeatureItemData>  $items
+     * @param  FeatureItemData[]  $items
+     * @param  CtaData[]  $ctas
      */
     public function __construct(
-        #[Nullable, Max(255)]
-        public ?string $heading = null,
-        #[Nullable]
-        public ?string $intro = null,
-        #[Min(1), Max(6)]
-        public int $columns = 3,
         #[DataCollectionOf(FeatureItemData::class)]
         public array $items = [],
+        #[DataCollectionOf(CtaData::class)]
+        public array $ctas = [],
+        public FeaturesStylesData $styles = new FeaturesStylesData,
     ) {}
 }

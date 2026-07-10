@@ -31,8 +31,9 @@ class PublishBlockFactory extends Factory
             'name' => $name,
             'key' => Str::slug($name),
             'excerpt' => $this->faker->optional()->sentence(),
-            'description' => $this->faker->optional()->paragraph(),
-            'props' => ['body' => $this->faker->paragraph(), 'format' => 'markdown'],
+            // The body lives in the column, not in props.
+            'description' => $this->faker->paragraph(),
+            'props' => ['format' => 'markdown'],
             'sort' => 0,
             'is_active' => true,
         ];
@@ -49,7 +50,13 @@ class PublishBlockFactory extends Factory
     {
         return $this->state(fn (array $attributes): array => [
             'template_key' => 'hero',
-            'props' => ['heading' => $this->faker->sentence(), 'alignment' => 'center'],
+            'props' => [
+                'pre' => $this->faker->words(2, true),
+                'ctas' => [
+                    ['label' => $this->faker->words(2, true), 'url' => '/'.$this->faker->slug()],
+                ],
+                'styles' => ['title' => ['align' => 'center']],
+            ],
         ]);
     }
 
@@ -59,11 +66,9 @@ class PublishBlockFactory extends Factory
             'template_key' => 'warranty',
             'props' => [
                 'pre' => $this->faker->words(2, true),
-                'title' => $this->faker->sentence(),
-                'overview' => $this->faker->paragraph(),
                 'items' => [
-                    ['label' => $this->faker->words(2, true), 'description' => $this->faker->sentence()],
-                    ['label' => $this->faker->words(2, true), 'description' => null],
+                    ['title' => $this->faker->words(2, true), 'text' => $this->faker->sentence()],
+                    ['title' => $this->faker->words(2, true), 'text' => null],
                 ],
             ],
         ]);

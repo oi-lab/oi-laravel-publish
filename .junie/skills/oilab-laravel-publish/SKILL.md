@@ -30,6 +30,12 @@ views; the host application wires the UI (e.g. Inertia/React).
   BreadcrumbData, MapData, TableData, WarrantyData).
 - **PropsCast** — casts the JSON `props` column to the typed `PropsData`
   subclass declared by the row's template, falling back to `GenericPropsData`.
+- **CtaData** — a call to action (`label`, `url`, `target`, `variant`, `size`,
+  `position`). Every block but `breadcrumb` carries a `ctas` collection of them.
+- **`Data/Styles/*`** — presentation. Each block has its own `*StylesData`
+  composing flat primitives (`BlockStyleData`, `HeadingStyleData`,
+  `TextStyleData`, `CtasStyleData`, `QuoteStyleData`, `ListStyleData`,
+  `CarouselStyleData`, `BreakpointsData`). Composed, never inherited.
 
 ## The static resolver
 
@@ -70,17 +76,24 @@ $child = PublishPage::create([
 $hero = PublishBlock::create([
     'publish_page_id' => $page->id,
     'template_key'    => 'hero',
-    'name'            => 'Hero',
+    'name'            => 'Ship faster',   // the rendered title
     'key'             => 'hero',
-    'props'           => ['heading' => 'Welcome', 'alignment' => 'center'],
+    'excerpt'         => 'A short lead.',
+    'props'           => [
+        'pre'    => 'New',
+        'ctas'   => [['label' => 'Get started', 'url' => '/signup']],
+        'styles' => ['title' => ['align' => 'center']],
+    ],
     'sort'            => 0,
 ]);
 
-$page->blocks;            // ordered by `sort`
-$page->children;         // ordered by `sort`
-$hero->props;            // HeroData instance (typed)
-$hero->props->heading;   // 'Welcome'
-$hero->template();       // PublishTemplateData for 'hero'
+$page->blocks;                       // ordered by `sort`
+$page->children;                     // ordered by `sort`
+$hero->props;                        // HeroData instance (typed)
+$hero->props->pre;                   // 'New'
+$hero->props->ctas[0]->variant;      // CtaVariant::Default
+$hero->props->styles->title->tag;    // HeadingTag::H2
+$hero->template();                   // PublishTemplateData for 'hero'
 ```
 
 `props` accepts either a raw array or a `PropsData` instance, and always reads
@@ -92,6 +105,21 @@ A template's `propsClass` decides how `props` hydrates. To add a new typed
 block, create a `Data/Blocks/<Name>Data` class **extending `PropsData`** and
 point a template's `propsClass` at it in config. Unknown/typeless templates use
 `GenericPropsData`, whose `->value('key', $default)` reads arbitrary keys.
+
+**Props never carry content.** A block's title, lead and body are its `name`,
+`excerpt` and `description` **columns**. Props hold what is specific to the
+template (`pre`, `format`, `form_key`, `items`, …) plus the two cross-cutting
+keys every block shares — `ctas` and `styles`. Never declare a `title`,
+`excerpt` or `description` prop.
+
+Every style field has a default, so a partial `styles` hydrates cleanly and
+leaves the untouched siblings alone.
+
+Run `php artisan publish:install-data --namespace="App\Publish"` to copy the
+block, style and enum classes into the host application (namespaces rewritten,
+`PropsData` still the package's). Afterwards, repoint each `templates.*.propsClass`
+and swap `OiLab\OiLaravelPublish\Data` for the new namespace in `data_namespaces`
+— keeping both aborts `oi:gen-ts` on a short-name collision.
 
 ## Attachments
 
@@ -135,10 +163,15 @@ when no store is available.
 ## Conventions
 
 - Recursive pages only; blocks are a flat ordered list per page.
+- Content lives in columns, presentation and template specifics in `props`.
 - `props` is typed via `PropsData` on the model. For TypeScript, add
   `OiLab\OiLaravelPublish\Data` to `data_namespaces` in `config/oi-laravel-ts.php`:
   `oi:gen-ts` then emits `IPublishPageData`, `IPublishBlockData`, the typed block
-  interfaces (`IHeroData`, ...), and `IPublishBlockData.props` as their union.
+  interfaces (`IHeroData`, ...), `ICtaData`, the `I*StylesData` interfaces, and
+  `IPublishBlockData.props` as the union of the block props.
+- Style classes are composed, never inherited: `oi-laravel-ts` reads only the
+  constructor of the class it reflects, so an inherited property would silently
+  vanish from the generated interface.
 - Resolve models/templates through `OiLaravelPublish`, never hardcode `::class`.
 - Override the `models`, `templates`, `attachments`, `renderers` and `settings`
   config to customise behaviour. Install `oi-lab/oi-laravel-settings` for
