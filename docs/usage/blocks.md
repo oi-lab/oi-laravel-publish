@@ -69,15 +69,21 @@ hold what is specific to the template, plus the two cross-cutting keys `ctas` an
 Each block's `styles` object exposes only the slots it can use; see the
 [styles reference](./props.md#styles) for what each slot controls.
 
+Blocks that render a `cover` attachment (`hero`, `features`, `content`) carry a
+`cover_layout` prop — a `CoverLayout` enum choosing how the image is arranged
+relative to the content: `background`, `before`, `after`, `left`, `right`
+(default `right`).
+
 ### Hero — `hero`
 
-Full-width headline with an optional kicker and a background image.
+Full-width headline with an optional kicker and a cover image.
 
 | Prop | Type | Notes |
 |------|------|-------|
 | `pre` | string? | kicker shown above the title (≤255) |
+| `cover_layout` | `CoverLayout` | how the cover is arranged (default `right`) |
 
-- **Media**: `cover` attachment (background image).
+- **Media**: `cover` attachment (arranged by `cover_layout`).
 - **Styles**: `block`, `title`, `excerpt`, `ctas`.
 
 ### Features — `features`
@@ -87,7 +93,9 @@ A grid of feature items (`FeatureItemData`).
 | Prop | Type | Notes |
 |------|------|-------|
 | `items` | `FeatureItemData[]` | `title` (req, ≤255), `text?`, `icon?` (≤255), `ctas` |
+| `cover_layout` | `CoverLayout` | how an optional cover is arranged (default `right`) |
 
+- **Media**: optional `cover` attachment (arranged by `cover_layout`).
 - **Styles**: `block`, `title`, `excerpt`, `ctas`, `list`.
 - **Default**: `styles.list.columns` = `{ base: 1, md: 3 }` (seeded in config).
 
@@ -109,8 +117,11 @@ Free-form rich text; the body is the `description` column.
 
 | Prop | Type | Notes |
 |------|------|-------|
+| `pre` | string? | kicker shown above the title (≤255) |
 | `format` | `markdown` \| `html` | which renderer the host applies (default `markdown`) |
+| `cover_layout` | `CoverLayout` | how an optional cover is arranged (default `right`) |
 
+- **Media**: optional `cover` attachment (arranged by `cover_layout`).
 - **Styles**: `block`, `title`, `description`, `ctas`.
 
 ### Form — `form`
