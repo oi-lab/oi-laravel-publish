@@ -14,7 +14,7 @@ description: >-
 
 Create a new typed block for `oi-lab/oi-laravel-publish` **alongside the existing
 ones** (`hero`, `features`, `warranty`, `content`, `blockquote`, `slides`, `form`,
-`breadcrumb`, `map`, `table`). A block is four coordinated pieces:
+`breadcrumb`, `map`, `table`, `faqs`). A block is four coordinated pieces:
 
 1. A typed **`PropsData` subclass** in `src/Data/Blocks/<Name>Data.php` that
    declares and validates the block's props (spatie/laravel-data).

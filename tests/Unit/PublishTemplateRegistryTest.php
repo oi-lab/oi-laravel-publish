@@ -26,7 +26,7 @@ it('filters templates by type', function () {
 
     expect(array_keys($pages))->toContain('default', 'landing')
         ->and(array_keys($pages))->not->toContain('hero')
-        ->and(array_keys($blocks))->toContain('hero', 'features', 'content', 'slides', 'warranty');
+        ->and(array_keys($blocks))->toContain('hero', 'features', 'content', 'slides', 'warranty', 'faqs');
 });
 
 it('exposes template keys by type', function () {

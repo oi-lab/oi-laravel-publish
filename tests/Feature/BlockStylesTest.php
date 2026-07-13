@@ -1,6 +1,7 @@
 <?php
 
 use OiLab\OiLaravelPublish\Data\Blocks\BlockquoteData;
+use OiLab\OiLaravelPublish\Data\Blocks\FaqsData;
 use OiLab\OiLaravelPublish\Data\Blocks\FeaturesData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
@@ -62,7 +63,10 @@ it('exposes only the style slots a block can use', function () {
     expect(array_keys(HeroData::from([])->styles->toArray()))
         ->toBe(['block', 'title', 'excerpt', 'ctas'])
         ->and(array_keys(BlockquoteData::from([])->styles->toArray()))
-        ->toBe(['block', 'quote', 'ctas']);
+        ->toBe(['block', 'quote', 'ctas'])
+        // A FAQ carries no calls to action: no `ctas` slot.
+        ->and(array_keys(FaqsData::from([])->styles->toArray()))
+        ->toBe(['block', 'title', 'excerpt', 'list']);
 });
 
 it('scales a blockquote typographically', function () {

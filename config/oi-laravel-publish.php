@@ -3,6 +3,7 @@
 use OiLab\OiLaravelPublish\Data\Blocks\BlockquoteData;
 use OiLab\OiLaravelPublish\Data\Blocks\BreadcrumbData;
 use OiLab\OiLaravelPublish\Data\Blocks\ContentData;
+use OiLab\OiLaravelPublish\Data\Blocks\FaqsData;
 use OiLab\OiLaravelPublish\Data\Blocks\FeaturesData;
 use OiLab\OiLaravelPublish\Data\Blocks\FormData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
@@ -130,7 +131,7 @@ return [
             'description' => 'A standard content page composed of ordered blocks.',
             'allowedBlocks' => [
                 'hero', 'features', 'content', 'blockquote', 'slides',
-                'form', 'breadcrumb', 'map', 'table', 'warranty',
+                'form', 'breadcrumb', 'map', 'table', 'warranty', 'faqs',
             ],
         ],
         [
@@ -138,7 +139,7 @@ return [
             'name' => 'Landing page',
             'type' => PublishTemplateType::Page->value,
             'description' => 'A marketing landing page leading with a hero.',
-            'allowedBlocks' => ['hero', 'features', 'slides', 'content', 'form'],
+            'allowedBlocks' => ['hero', 'features', 'slides', 'content', 'form', 'faqs'],
         ],
 
         // --- Block templates ------------------------------------------------
@@ -215,6 +216,13 @@ return [
             'description' => 'An introduction with a cover image and a list of warranty items.',
             'propsClass' => WarrantyData::class,
             'props' => ['pre' => ''],
+        ],
+        [
+            'key' => 'faqs',
+            'name' => 'FAQ',
+            'type' => PublishTemplateType::Block->value,
+            'description' => 'A list of questions with markdown answers.',
+            'propsClass' => FaqsData::class,
         ],
     ],
 ];

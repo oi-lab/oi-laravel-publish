@@ -74,6 +74,19 @@ class PublishBlockFactory extends Factory
         ]);
     }
 
+    public function faqs(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'template_key' => 'faqs',
+            'props' => [
+                'items' => [
+                    ['question' => $this->faker->sentence().'?', 'answer' => $this->faker->paragraph()],
+                    ['question' => $this->faker->sentence().'?', 'answer' => $this->faker->paragraph()],
+                ],
+            ],
+        ]);
+    }
+
     public function template(string $key): static
     {
         return $this->state(fn (array $attributes): array => [

@@ -59,13 +59,14 @@ something else — `pre`, on `hero` and `warranty`.
 `HeroData`, `FeaturesData` (+ `FeatureItemData`), `BlockquoteData`, `ContentData`,
 `FormData`, `SlidesData` (+ `SlideItemData`), `BreadcrumbData`
 (+ `BreadcrumbItemData`), `MapData`, `TableData`, `WarrantyData`
-(+ `WarrantyItemData`).
+(+ `WarrantyItemData`), `FaqsData` (+ `FaqItemData`). See the
+[block catalogue](./blocks.md#block-catalogue) for each one's props.
 
 ## Calls to action
 
-Every block but `breadcrumb` carries a `ctas` collection of `CtaData`, so a block
-can offer several actions rather than the single `cta_label` / `cta_url` pair it
-used to:
+Every block but `breadcrumb` and `faqs` carries a `ctas` collection of `CtaData`,
+so a block can offer several actions rather than the single `cta_label` /
+`cta_url` pair it used to:
 
 ```php
 $hero->props->ctas[0]->label;     // 'Get started'
