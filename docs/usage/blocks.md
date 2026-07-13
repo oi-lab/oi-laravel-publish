@@ -197,4 +197,4 @@ A list of question/answer pairs (`FaqItemData`). Carries **no** `ctas`.
 |------|------|-------|
 | `items` | `FaqItemData[]` | `question` (req, ≤255), `answer` (req, markdown) |
 
-- **Styles**: `block`, `title`, `excerpt`, `list`.
+- **Styles**: `block`, `title`, `excerpt`.

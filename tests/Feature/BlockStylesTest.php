@@ -64,9 +64,9 @@ it('exposes only the style slots a block can use', function () {
         ->toBe(['block', 'title', 'excerpt', 'ctas'])
         ->and(array_keys(BlockquoteData::from([])->styles->toArray()))
         ->toBe(['block', 'quote', 'ctas'])
-        // A FAQ carries no calls to action: no `ctas` slot.
+        // A FAQ carries no calls to action and no list styling.
         ->and(array_keys(FaqsData::from([])->styles->toArray()))
-        ->toBe(['block', 'title', 'excerpt', 'list']);
+        ->toBe(['block', 'title', 'excerpt']);
 });
 
 it('scales a blockquote typographically', function () {
