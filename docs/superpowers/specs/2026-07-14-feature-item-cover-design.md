@@ -117,3 +117,6 @@ class FeatureItemData extends Data
 - Extending per-item covers to other item types (`SlideItemData` already has its
   own via `slides`; `WarrantyItemData`, `FaqItemData`, etc. are untouched).
 - Front-end/Inertia rendering (host concern; this package ships the data layer).
+- The `gallery` collection is scoped to feature-item covers only. Do not overload
+  it for per-item covers on other block types — add a purpose-named collection
+  instead, to preserve the one-collection-per-purpose clarity `slides` has.

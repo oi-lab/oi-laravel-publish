@@ -27,7 +27,7 @@ use OiLab\OiLaravelPublish\OiLaravelPublish;
  *
  * An ordered block belonging to a single {@see PublishPage}. It references a
  * code-defined block template by `template_key`, carries typed `props`, and owns
- * `cover` and `slides` attachment collections.
+ * `cover`, `slides` and `gallery` attachment collections.
  *
  * @property int $id
  * @property string $uuid

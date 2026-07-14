@@ -41,8 +41,8 @@ if ($request->file('cover')) {
 }
 ```
 
-The [form requests](../configuration/configuration.md) validate `cover` and
-`slides` uploads for you.
+The [form requests](../configuration/configuration.md) validate `cover`, `slides`
+and `gallery` uploads for you.
 
 ## Configuring collections
 
