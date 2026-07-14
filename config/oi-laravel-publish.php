@@ -54,7 +54,7 @@ return [
     */
     'attachments' => [
         'page' => ['cover'],
-        'block' => ['cover', 'slides'],
+        'block' => ['cover', 'slides', 'gallery'],
         'max_files' => 30,
         'max_file_size' => 10240, // kilobytes
     ],

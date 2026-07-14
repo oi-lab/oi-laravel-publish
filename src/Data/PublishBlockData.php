@@ -37,7 +37,7 @@ use Spatie\LaravelData\Optional;
  * front end must therefore narrow on `template_key`, the only discriminant, and
  * cast: `props as IHeroData` once `template_key === 'hero'`.
  *
- * `cover` and `slides` are `Optional`: they appear in the JSON only when their
+ * `cover`, `slides` and `gallery` are `Optional`: they appear in the JSON only when their
  * relation was eager-loaded. An absent key means "not loaded", where a null
  * `cover` means "loaded, and there is no cover".
  */
@@ -46,6 +46,7 @@ class PublishBlockData extends Data
     /**
      * @param  HeroData|FeaturesData|BlockquoteData|ContentData|FormData|SlidesData|BreadcrumbData|MapData|TableData|WarrantyData|array<string, mixed>  $props
      * @param  AttachmentData[]|Optional  $slides
+     * @param  AttachmentData[]|Optional  $gallery
      */
     public function __construct(
         public ?int $id,
@@ -61,6 +62,7 @@ class PublishBlockData extends Data
         public bool $is_active = true,
         public AttachmentData|Optional|null $cover = new Optional,
         public array|Optional $slides = new Optional,
+        public array|Optional $gallery = new Optional,
     ) {}
 
     /**
@@ -91,6 +93,9 @@ class PublishBlockData extends Data
             cover: $block->relationLoaded('cover') ? $block->cover?->toData() : new Optional,
             slides: $block->relationLoaded('slides')
                 ? $block->slides->map(fn (Attachment $slide): AttachmentData => $slide->toData())->all()
+                : new Optional,
+            gallery: $block->relationLoaded('gallery')
+                ? $block->gallery->map(fn (Attachment $g): AttachmentData => $g->toData())->all()
                 : new Optional,
         );
     }

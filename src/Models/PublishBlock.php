@@ -43,6 +43,7 @@ use OiLab\OiLaravelPublish\OiLaravelPublish;
  * @property-read PublishPage $page
  * @property-read Attachment|null $cover
  * @property-read Collection<int, Attachment> $slides
+ * @property-read Collection<int, Attachment> $gallery
  */
 class PublishBlock extends Model
 {
@@ -125,6 +126,16 @@ class PublishBlock extends Model
     public function slides(): MorphMany
     {
         return $this->attachments('slides');
+    }
+
+    /**
+     * The ordered `gallery` attachment collection for this block.
+     *
+     * @return MorphMany<Attachment, $this>
+     */
+    public function gallery(): MorphMany
+    {
+        return $this->attachments('gallery');
     }
 
     /**
