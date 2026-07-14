@@ -15,6 +15,7 @@ use OiLab\OiLaravelPublish\Enums\BlockWidth;
 use OiLab\OiLaravelPublish\Enums\HeadingTag;
 use OiLab\OiLaravelPublish\Enums\HorizontalAlign;
 use OiLab\OiLaravelPublish\Enums\ListMarker;
+use OiLab\OiLaravelPublish\Enums\MediaRatio;
 use OiLab\OiLaravelPublish\Enums\SlideNavPosition;
 use OiLab\OiLaravelPublish\Enums\SlideNavSize;
 use OiLab\OiLaravelPublish\Enums\TextScale;
@@ -116,4 +117,12 @@ it('hydrates carousel navigation from snake_case keys', function () {
 
     expect($slides->styles->nav_position)->toBe(SlideNavPosition::Top)
         ->and($slides->styles->nav_size)->toBe(SlideNavSize::Large);
+});
+
+it('carries a block-level media ratio and no duplicated nav position prop', function () {
+    expect(SlidesData::from([])->media_ratio)->toBe(MediaRatio::Inherit)
+        ->and(SlidesData::from(['media_ratio' => 'widescreen'])->media_ratio)->toBe(MediaRatio::Widescreen)
+        // navPosition is presentation: it lives only in styles now, not in props.
+        ->and(array_keys(SlidesData::from([])->toArray()))->not->toContain('navPosition')
+        ->and(SlidesData::from([])->styles->nav_position)->toBe(SlideNavPosition::Bottom);
 });
