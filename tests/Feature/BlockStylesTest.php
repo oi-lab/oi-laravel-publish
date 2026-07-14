@@ -126,3 +126,13 @@ it('carries a block-level media ratio and no duplicated nav position prop', func
         ->and(array_keys(SlidesData::from([])->toArray()))->not->toContain('navPosition')
         ->and(SlidesData::from([])->styles->nav_position)->toBe(SlideNavPosition::Bottom);
 });
+
+it('hydrates a per-slide attachment_uuid through the items collection', function () {
+    $slides = SlidesData::from(['items' => [
+        ['title' => 'With image', 'attachment_uuid' => '9b7c1e2a-4f56-4c3d-8a1b-2e3f4a5b6c7d'],
+        ['title' => 'Text only'],
+    ]]);
+
+    expect($slides->items[0]->attachment_uuid)->toBe('9b7c1e2a-4f56-4c3d-8a1b-2e3f4a5b6c7d')
+        ->and($slides->items[1]->attachment_uuid)->toBeNull();
+});

@@ -3,7 +3,7 @@
 namespace OiLab\OiLaravelPublish\Enums;
 
 /**
- * How wide a block is: small, medium, large, or none.
+ * The vertical gap between a block's stacked children: small, medium, large, or none.
  */
 enum BlockSpaceY: string
 {

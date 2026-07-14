@@ -3,7 +3,7 @@
 namespace OiLab\OiLaravelPublish\Enums;
 
 /**
- * How wide a block is: small, medium, large, or none.
+ * The block's outer vertical (top and bottom) margin: small, medium, large, or none.
  */
 enum BlockMarginY: string
 {
