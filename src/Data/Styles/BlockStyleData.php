@@ -21,9 +21,9 @@ class BlockStyleData extends Data
     public function __construct(
         public BlockHeight $height = BlockHeight::Inherit,
         public BlockWidth $width = BlockWidth::Medium,
-        public BlockMarginX $marginX = BlockMarginX::Auto,
-        public BlockMarginY $marginY = BlockMarginY::Medium,
-        public BlockSpaceY $spaceY = BlockSpaceY::Medium,
+        public BlockMarginX $margin_x = BlockMarginX::Auto,
+        public BlockMarginY $margin_y = BlockMarginY::Medium,
+        public BlockSpaceY $space_y = BlockSpaceY::Medium,
         public BlockAlignItems $items = BlockAlignItems::Start,
         public BlockJustify $justify = BlockJustify::Start,
         public BlockTheme $theme = BlockTheme::Light,

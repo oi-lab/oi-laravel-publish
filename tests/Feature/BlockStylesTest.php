@@ -7,7 +7,11 @@ use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
 use OiLab\OiLaravelPublish\Data\Styles\HeroStylesData;
 use OiLab\OiLaravelPublish\Enums\BlockHeight;
+use OiLab\OiLaravelPublish\Enums\BlockMarginX;
+use OiLab\OiLaravelPublish\Enums\BlockMarginY;
+use OiLab\OiLaravelPublish\Enums\BlockSpaceY;
 use OiLab\OiLaravelPublish\Enums\BlockTheme;
+use OiLab\OiLaravelPublish\Enums\BlockWidth;
 use OiLab\OiLaravelPublish\Enums\HeadingTag;
 use OiLab\OiLaravelPublish\Enums\HorizontalAlign;
 use OiLab\OiLaravelPublish\Enums\ListMarker;
@@ -92,4 +96,15 @@ it('seeds the template default columns from config', function () {
     $template = OiLaravelPublish::template('features');
 
     expect($template->props)->toBe(['styles' => ['list' => ['columns' => ['base' => 1, 'md' => 3]]]]);
+});
+
+it('hydrates block spacing from snake_case keys', function () {
+    $hero = HeroData::from(['styles' => ['block' => [
+        'width' => 'full', 'margin_x' => 'none', 'margin_y' => 'lg', 'space_y' => 'sm',
+    ]]]);
+
+    expect($hero->styles->block->width)->toBe(BlockWidth::Full)
+        ->and($hero->styles->block->margin_x)->toBe(BlockMarginX::None)
+        ->and($hero->styles->block->margin_y)->toBe(BlockMarginY::Large)
+        ->and($hero->styles->block->space_y)->toBe(BlockSpaceY::Small);
 });
