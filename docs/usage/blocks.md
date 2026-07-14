@@ -92,10 +92,11 @@ A grid of feature items (`FeatureItemData`).
 
 | Prop | Type | Notes |
 |------|------|-------|
-| `items` | `FeatureItemData[]` | `title` (req, ≤255), `text?`, `icon?` (≤255), `ctas` |
-| `cover_layout` | `CoverLayout` | how an optional cover is arranged (default `right`) |
+| `items` | `FeatureItemData[]` | `title` (req, ≤255), `text?`, `icon?` (≤255), `attachment_uuid?`, `cover_ratio`, `ctas` |
+| `cover_layout` | `CoverLayout` | how the block-level cover is arranged (default `right`) |
+| `cover_ratio` | `MediaRatio` | block-level cover aspect ratio (default `inherit`) |
 
-- **Media**: optional `cover` attachment (arranged by `cover_layout`).
+- **Media**: an optional block-level `cover` (arranged by `cover_layout`), plus a `gallery` collection — each item links one entry by `attachment_uuid` and shows it at its own `cover_ratio` (`inherit` defers to the block's).
 - **Styles**: `block`, `title`, `excerpt`, `ctas`, `list`.
 - **Default**: `styles.list.columns` = `{ base: 1, md: 3 }` (seeded in config).
 

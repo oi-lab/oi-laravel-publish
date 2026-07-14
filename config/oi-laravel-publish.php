@@ -49,12 +49,13 @@ return [
     |--------------------------------------------------------------------------
     |
     | The named oi-laravel-attachments collections each model exposes. Pages own
-    | a single `cover`; blocks own a `cover` plus an ordered `slides` gallery.
+    | a single `cover`; blocks own a `cover`, an ordered `slides` gallery, and a
+    | `gallery` collection.
     |
     */
     'attachments' => [
         'page' => ['cover'],
-        'block' => ['cover', 'slides'],
+        'block' => ['cover', 'slides', 'gallery'],
         'max_files' => 30,
         'max_file_size' => 10240, // kilobytes
     ],

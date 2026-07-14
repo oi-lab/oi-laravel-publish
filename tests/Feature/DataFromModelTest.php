@@ -178,3 +178,29 @@ describe('the props union', function () {
             ->and($data->props)->toHaveKey('items');
     });
 });
+
+it('carries the ordered gallery collection once eager loaded', function () {
+    $page = PublishPage::factory()->create();
+    $block = PublishBlock::factory()->forPage($page)->hero()->create();
+    $first = File::factory()->create();
+    $second = File::factory()->create();
+    $block->attachFile($first, 'gallery');
+    $block->attachFile($second, 'gallery');
+
+    $data = PublishBlockData::fromModel($block->fresh()->load('gallery.file'));
+
+    expect($data->gallery)->toHaveCount(2)
+        ->and($data->gallery[0]->file_id)->toBe($first->id)
+        ->and($data->gallery[1]->file_id)->toBe($second->id)
+        ->and($data->toArray()['gallery'])->toHaveCount(2);
+});
+
+it('omits gallery from the payload when the relation is not loaded', function () {
+    $page = PublishPage::factory()->create();
+    $block = PublishBlock::factory()->forPage($page)->hero()->create();
+
+    $data = PublishBlockData::fromModel($block);
+
+    expect($data->gallery)->toBeInstanceOf(Optional::class)
+        ->and($data->toArray())->not->toHaveKey('gallery');
+});

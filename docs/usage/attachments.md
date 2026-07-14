@@ -10,8 +10,10 @@ Pages and blocks use `oi-lab/oi-laravel-attachments` for media. The collections
 are:
 
 - **Pages**: `cover` (single image).
-- **Blocks**: `cover` (single image) and `slides` (ordered gallery for the
-  `slides` carousel template; each slide links one entry by `attachment_uuid`).
+- **Blocks**: `cover` (single image), `slides` (ordered gallery for the `slides`
+  carousel; each slide links one entry by `attachment_uuid`), and `gallery`
+  (ordered images for feature-item covers; each item links one entry by
+  `attachment_uuid`).
 
 ## Attaching files
 
@@ -39,8 +41,8 @@ if ($request->file('cover')) {
 }
 ```
 
-The [form requests](../configuration/configuration.md) validate `cover` and
-`slides` uploads for you.
+The [form requests](../configuration/configuration.md) validate `cover`, `slides`
+and `gallery` uploads for you.
 
 ## Configuring collections
 
@@ -49,7 +51,7 @@ The collections and upload limits are configurable under the `attachments` key:
 ```php
 'attachments' => [
     'page'  => ['cover'],
-    'block' => ['cover', 'slides'],
+    'block' => ['cover', 'slides', 'gallery'],
     'max_files' => 30,
     'max_file_size' => 10240, // kilobytes
 ],
