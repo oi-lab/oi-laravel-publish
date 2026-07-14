@@ -49,7 +49,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | The named oi-laravel-attachments collections each model exposes. Pages own
-    | a single `cover`; blocks own a `cover` plus an ordered `slides` gallery.
+    | a single `cover`; blocks own a `cover`, an ordered `slides` gallery, and a
+    | `gallery` collection.
     |
     */
     'attachments' => [

@@ -10,8 +10,10 @@ Pages and blocks use `oi-lab/oi-laravel-attachments` for media. The collections
 are:
 
 - **Pages**: `cover` (single image).
-- **Blocks**: `cover` (single image) and `slides` (ordered gallery for the
-  `slides` carousel template; each slide links one entry by `attachment_uuid`).
+- **Blocks**: `cover` (single image), `slides` (ordered gallery for the `slides`
+  carousel; each slide links one entry by `attachment_uuid`), and `gallery`
+  (ordered images for feature-item covers; each item links one entry by
+  `attachment_uuid`).
 
 ## Attaching files
 
