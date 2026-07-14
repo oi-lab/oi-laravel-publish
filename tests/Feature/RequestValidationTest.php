@@ -56,3 +56,14 @@ it('rejects a block referencing a missing page', function () {
     expect($validator->fails())->toBeTrue()
         ->and($validator->errors()->has('publish_page_id'))->toBeTrue();
 });
+
+it('exposes gallery upload rules on the block request', function () {
+    $rules = (new PublishBlockRequest)->rules();
+
+    expect($rules)->toHaveKey('gallery')
+        ->and($rules['gallery'])->toContain('nullable')
+        ->and($rules['gallery'])->toContain('array')
+        ->and($rules)->toHaveKey('gallery.*')
+        ->and($rules['gallery.*'])->toContain('file')
+        ->and($rules['gallery.*'])->toContain('image');
+});

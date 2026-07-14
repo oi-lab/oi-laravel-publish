@@ -37,6 +37,8 @@ class PublishBlockRequest extends FormRequest
             'cover' => ['nullable', 'file', 'image', "max:{$maxSize}"],
             'slides' => ['nullable', 'array', "max:{$maxFiles}"],
             'slides.*' => ['file', 'image', "max:{$maxSize}"],
+            'gallery' => ['nullable', 'array', "max:{$maxFiles}"],
+            'gallery.*' => ['file', 'image', "max:{$maxSize}"],
         ];
     }
 }
