@@ -6,7 +6,7 @@ use OiLab\OiLaravelPublish\Data\CtaData;
 use OiLab\OiLaravelPublish\Data\PropsData;
 use OiLab\OiLaravelPublish\Data\Styles\FeaturesStylesData;
 use OiLab\OiLaravelPublish\Enums\CoverLayout;
-use OiLab\OiLaravelPublish\Enums\CoverRatio;
+use OiLab\OiLaravelPublish\Enums\MediaRatio;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 
 /**
@@ -26,7 +26,7 @@ class FeaturesData extends PropsData
         #[DataCollectionOf(FeatureItemData::class)]
         public array $items = [],
         public CoverLayout $cover_layout = CoverLayout::Right,
-        public CoverRatio $cover_ratio = CoverRatio::Inherit,
+        public MediaRatio $cover_ratio = MediaRatio::Inherit,
         #[DataCollectionOf(CtaData::class)]
         public array $ctas = [],
         public FeaturesStylesData $styles = new FeaturesStylesData,
