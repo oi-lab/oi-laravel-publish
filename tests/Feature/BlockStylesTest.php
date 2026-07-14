@@ -15,6 +15,8 @@ use OiLab\OiLaravelPublish\Enums\BlockWidth;
 use OiLab\OiLaravelPublish\Enums\HeadingTag;
 use OiLab\OiLaravelPublish\Enums\HorizontalAlign;
 use OiLab\OiLaravelPublish\Enums\ListMarker;
+use OiLab\OiLaravelPublish\Enums\SlideNavPosition;
+use OiLab\OiLaravelPublish\Enums\SlideNavSize;
 use OiLab\OiLaravelPublish\Enums\TextScale;
 use OiLab\OiLaravelPublish\Models\PublishBlock;
 use OiLab\OiLaravelPublish\Models\PublishPage;
@@ -107,4 +109,11 @@ it('hydrates block spacing from snake_case keys', function () {
         ->and($hero->styles->block->margin_x)->toBe(BlockMarginX::None)
         ->and($hero->styles->block->margin_y)->toBe(BlockMarginY::Large)
         ->and($hero->styles->block->space_y)->toBe(BlockSpaceY::Small);
+});
+
+it('hydrates carousel navigation from snake_case keys', function () {
+    $slides = SlidesData::from(['styles' => ['nav_position' => 'top', 'nav_size' => 'large']]);
+
+    expect($slides->styles->nav_position)->toBe(SlideNavPosition::Top)
+        ->and($slides->styles->nav_size)->toBe(SlideNavSize::Large);
 });

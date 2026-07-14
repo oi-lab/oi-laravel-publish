@@ -19,8 +19,8 @@ class SlidesStylesData extends Data
         public BlockStyleData $block = new BlockStyleData,
         public HeadingStyleData $title = new HeadingStyleData,
         public CtasStyleData $ctas = new CtasStyleData,
-        public SlideNavPosition $navPosition = SlideNavPosition::Bottom,
-        public SlideNavSize $navSize = SlideNavSize::Medium,
+        public SlideNavPosition $nav_position = SlideNavPosition::Bottom,
+        public SlideNavSize $nav_size = SlideNavSize::Medium,
         public CarouselStyleData $carousel = new CarouselStyleData,
     ) {}
 }
