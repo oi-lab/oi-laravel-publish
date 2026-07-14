@@ -87,6 +87,20 @@ class PublishBlockFactory extends Factory
         ]);
     }
 
+    public function slides(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'template_key' => 'slides',
+            'props' => [
+                'media_ratio' => 'widescreen',
+                'items' => [
+                    ['title' => $this->faker->words(2, true), 'caption' => $this->faker->sentence()],
+                    ['title' => $this->faker->words(2, true), 'caption' => null],
+                ],
+            ],
+        ]);
+    }
+
     public function template(string $key): static
     {
         return $this->state(fn (array $attributes): array => [

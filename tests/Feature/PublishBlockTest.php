@@ -7,9 +7,11 @@ use OiLab\OiLaravelPublish\Data\Blocks\FaqItemData;
 use OiLab\OiLaravelPublish\Data\Blocks\FaqsData;
 use OiLab\OiLaravelPublish\Data\Blocks\FeaturesData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
+use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
 use OiLab\OiLaravelPublish\Data\Blocks\WarrantyData;
 use OiLab\OiLaravelPublish\Data\Blocks\WarrantyItemData;
 use OiLab\OiLaravelPublish\Enums\CoverLayout;
+use OiLab\OiLaravelPublish\Enums\MediaRatio;
 use OiLab\OiLaravelPublish\Models\PublishBlock;
 use OiLab\OiLaravelPublish\Models\PublishPage;
 
@@ -118,4 +120,15 @@ it('converts to a data object', function () {
         ->and($props)->toHaveKey('styles')
         ->and($props['styles']['title']['align'])->toBe('center')
         ->and($props['ctas'][0])->toHaveKeys(['label', 'url', 'target', 'variant', 'size', 'position']);
+});
+
+it('builds a slides block from its factory state', function () {
+    $page = PublishPage::factory()->create();
+    $block = PublishBlock::factory()->forPage($page)->slides()->create();
+
+    expect($block->template_key)->toBe('slides')
+        ->and($block->props)->toBeInstanceOf(SlidesData::class)
+        ->and($block->props->media_ratio)->toBe(MediaRatio::Widescreen)
+        ->and($block->props->items)->toHaveCount(2)
+        ->and($block->props->items[0]->attachment_uuid)->toBeNull();
 });

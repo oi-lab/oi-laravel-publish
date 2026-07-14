@@ -73,3 +73,21 @@ it('carries a single, unpositioned cta on a slide', function () {
 it('rejects a cta without a label or a url', function () {
     CtaData::validate(['url' => '/no-label']);
 })->throws(ValidationException::class);
+
+it('optionally links a slide to one attachment by uuid', function () {
+    $linked = SlideItemData::from([
+        'title' => 'With image',
+        'attachment_uuid' => '9b7c1e2a-4f56-4c3d-8a1b-2e3f4a5b6c7d',
+    ]);
+
+    expect($linked->attachment_uuid)->toBe('9b7c1e2a-4f56-4c3d-8a1b-2e3f4a5b6c7d')
+        // A text-only slide leaves it null.
+        ->and(SlideItemData::from(['title' => 'Text only'])->attachment_uuid)->toBeNull();
+});
+
+it('rejects an attachment_uuid longer than 36 chars', function () {
+    SlideItemData::validate([
+        'title' => 'Too long',
+        'attachment_uuid' => str_repeat('a', 37),
+    ]);
+})->throws(ValidationException::class);

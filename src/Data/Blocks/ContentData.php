@@ -6,6 +6,7 @@ use OiLab\OiLaravelPublish\Data\CtaData;
 use OiLab\OiLaravelPublish\Data\PropsData;
 use OiLab\OiLaravelPublish\Data\Styles\ContentStylesData;
 use OiLab\OiLaravelPublish\Enums\CoverLayout;
+use OiLab\OiLaravelPublish\Enums\MediaRatio;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\In;
 use Spatie\LaravelData\Attributes\Validation\Max;
@@ -29,6 +30,7 @@ class ContentData extends PropsData
         #[Nullable, In(['markdown', 'html'])]
         public ?string $format = 'markdown',
         public CoverLayout $cover_layout = CoverLayout::Right,
+        public MediaRatio $cover_ratio = MediaRatio::Inherit,
         #[DataCollectionOf(CtaData::class)]
         public array $ctas = [],
         public ContentStylesData $styles = new ContentStylesData,

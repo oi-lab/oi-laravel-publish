@@ -140,18 +140,20 @@ Embeds a host-application form referenced by key.
 
 ### Slides — `slides`
 
-A carousel; slide images live in the `slides` attachment collection, matched to
-`items` by position.
+A carousel. Each `SlideItemData` optionally links one image from the block's
+`slides` attachment collection by its `attachment_uuid`, so a slide can be
+text-only. `media_ratio` sets the aspect ratio for the whole carousel.
 
 | Prop | Type | Notes |
 |------|------|-------|
 | `autoplay` | bool | default `false` |
 | `interval` | int | ms between slides (default `5000`, ≥0) |
 | `loop` | bool | default `true` |
-| `items` | `SlideItemData[]` | per-slide `title?`, `caption?`, and a single `cta?` |
+| `media_ratio` | `MediaRatio` | carousel aspect ratio (`inherit` `square` `widescreen` `basis-portrait` `basis-landscape`; default `inherit`) |
+| `items` | `SlideItemData[]` | per-slide `title?`, `caption?`, `attachment_uuid?`, and a single `cta?` |
 
-- **Media**: `slides` attachment collection (ordered images).
-- **Styles**: `block`, `title`, `ctas`, `carousel`.
+- **Media**: `slides` attachment collection (ordered images), linked per-slide by `attachment_uuid`.
+- **Styles**: `block`, `title`, `ctas`, `carousel`, plus `nav_position` / `nav_size`.
 
 ### Breadcrumb — `breadcrumb`
 

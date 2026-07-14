@@ -7,10 +7,17 @@ use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
 use OiLab\OiLaravelPublish\Data\Styles\HeroStylesData;
 use OiLab\OiLaravelPublish\Enums\BlockHeight;
+use OiLab\OiLaravelPublish\Enums\BlockMarginX;
+use OiLab\OiLaravelPublish\Enums\BlockMarginY;
+use OiLab\OiLaravelPublish\Enums\BlockSpaceY;
 use OiLab\OiLaravelPublish\Enums\BlockTheme;
+use OiLab\OiLaravelPublish\Enums\BlockWidth;
 use OiLab\OiLaravelPublish\Enums\HeadingTag;
 use OiLab\OiLaravelPublish\Enums\HorizontalAlign;
 use OiLab\OiLaravelPublish\Enums\ListMarker;
+use OiLab\OiLaravelPublish\Enums\MediaRatio;
+use OiLab\OiLaravelPublish\Enums\SlideNavPosition;
+use OiLab\OiLaravelPublish\Enums\SlideNavSize;
 use OiLab\OiLaravelPublish\Enums\TextScale;
 use OiLab\OiLaravelPublish\Models\PublishBlock;
 use OiLab\OiLaravelPublish\Models\PublishPage;
@@ -92,4 +99,40 @@ it('seeds the template default columns from config', function () {
     $template = OiLaravelPublish::template('features');
 
     expect($template->props)->toBe(['styles' => ['list' => ['columns' => ['base' => 1, 'md' => 3]]]]);
+});
+
+it('hydrates block spacing from snake_case keys', function () {
+    $hero = HeroData::from(['styles' => ['block' => [
+        'width' => 'full', 'margin_x' => 'none', 'margin_y' => 'lg', 'space_y' => 'sm',
+    ]]]);
+
+    expect($hero->styles->block->width)->toBe(BlockWidth::Full)
+        ->and($hero->styles->block->margin_x)->toBe(BlockMarginX::None)
+        ->and($hero->styles->block->margin_y)->toBe(BlockMarginY::Large)
+        ->and($hero->styles->block->space_y)->toBe(BlockSpaceY::Small);
+});
+
+it('hydrates carousel navigation from snake_case keys', function () {
+    $slides = SlidesData::from(['styles' => ['nav_position' => 'top', 'nav_size' => 'large']]);
+
+    expect($slides->styles->nav_position)->toBe(SlideNavPosition::Top)
+        ->and($slides->styles->nav_size)->toBe(SlideNavSize::Large);
+});
+
+it('carries a block-level media ratio and no duplicated nav position prop', function () {
+    expect(SlidesData::from([])->media_ratio)->toBe(MediaRatio::Inherit)
+        ->and(SlidesData::from(['media_ratio' => 'widescreen'])->media_ratio)->toBe(MediaRatio::Widescreen)
+        // navPosition is presentation: it lives only in styles now, not in props.
+        ->and(array_keys(SlidesData::from([])->toArray()))->not->toContain('navPosition')
+        ->and(SlidesData::from([])->styles->nav_position)->toBe(SlideNavPosition::Bottom);
+});
+
+it('hydrates a per-slide attachment_uuid through the items collection', function () {
+    $slides = SlidesData::from(['items' => [
+        ['title' => 'With image', 'attachment_uuid' => '9b7c1e2a-4f56-4c3d-8a1b-2e3f4a5b6c7d'],
+        ['title' => 'Text only'],
+    ]]);
+
+    expect($slides->items[0]->attachment_uuid)->toBe('9b7c1e2a-4f56-4c3d-8a1b-2e3f4a5b6c7d')
+        ->and($slides->items[1]->attachment_uuid)->toBeNull();
 });
