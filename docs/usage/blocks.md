@@ -92,11 +92,11 @@ A grid of feature items (`FeatureItemData`).
 
 | Prop | Type | Notes |
 |------|------|-------|
-| `items` | `FeatureItemData[]` | `title` (req, ≤255), `text?`, `icon?` (≤255), `attachment_uuid?`, `cover_ratio`, `ctas` |
+| `items` | `FeatureItemData[]` | `title` (req, ≤255), `pre?` (≤255), `text?`, `icon?` (≤255), `attachment_uuid?`, `item_layout`, `max_width?` (≤32), `cover_ratio`, `ctas` |
 | `cover_layout` | `CoverLayout` | how the block-level cover is arranged (default `right`) |
 | `cover_ratio` | `MediaRatio` | block-level cover aspect ratio (default `inherit`) |
 
-- **Media**: an optional block-level `cover` (arranged by `cover_layout`), plus a `gallery` collection — each item links one entry by `attachment_uuid` and shows it at its own `cover_ratio` (`inherit` defers to the block's).
+- **Media**: an optional block-level `cover` (arranged by `cover_layout`), plus a `gallery` collection — each item links one entry by `attachment_uuid`, arranges it with `item_layout` (`before` `after` `left` `right`), and shows it at its own `cover_ratio` (`inherit` defers to the block's). `max_width` optionally caps the item's width.
 - **Styles**: `block`, `title`, `excerpt`, `ctas`, `list`.
 - **Default**: `styles.list.columns` = `{ base: 1, md: 3 }` (seeded in config).
 
@@ -151,9 +151,9 @@ text-only. `media_ratio` sets the aspect ratio for the whole carousel.
 | `interval` | int | ms between slides (default `5000`, ≥0) |
 | `loop` | bool | default `true` |
 | `media_ratio` | `MediaRatio` | carousel aspect ratio (`inherit` `square` `widescreen` `basis-portrait` `basis-landscape`; default `inherit`) |
-| `items` | `SlideItemData[]` | per-slide `title?`, `caption?`, `attachment_uuid?`, and a single `cta?` |
+| `items` | `SlideItemData[]` | per-slide `title?`, `caption?`, `attachment_uuid?`, `item_layout`, `max_width?` (≤32), `cover_ratio`, and a single `cta?` |
 
-- **Media**: `slides` attachment collection (ordered images), linked per-slide by `attachment_uuid`.
+- **Media**: `slides` attachment collection (ordered images), linked per-slide by `attachment_uuid`; each slide arranges its image with `item_layout` and shows it at its own `cover_ratio` (`inherit` defers to the block's `media_ratio`). `max_width` optionally caps the slide's width.
 - **Styles**: `block`, `title`, `ctas`, `carousel`, plus `nav_position` / `nav_size`.
 
 ### Breadcrumb — `breadcrumb`

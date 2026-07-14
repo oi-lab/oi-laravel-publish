@@ -9,10 +9,12 @@ use OiLab\OiLaravelPublish\Data\Blocks\FaqsData;
 use OiLab\OiLaravelPublish\Data\Blocks\FeatureItemData;
 use OiLab\OiLaravelPublish\Data\Blocks\FeaturesData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
+use OiLab\OiLaravelPublish\Data\Blocks\SlideItemData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
 use OiLab\OiLaravelPublish\Data\Blocks\WarrantyData;
 use OiLab\OiLaravelPublish\Data\Blocks\WarrantyItemData;
 use OiLab\OiLaravelPublish\Enums\CoverLayout;
+use OiLab\OiLaravelPublish\Enums\ItemLayout;
 use OiLab\OiLaravelPublish\Enums\MediaRatio;
 use OiLab\OiLaravelPublish\Models\PublishBlock;
 use OiLab\OiLaravelPublish\Models\PublishPage;
@@ -135,23 +137,58 @@ it('builds a slides block from its factory state', function () {
         ->and($block->props->items[0]->attachment_uuid)->toBeNull();
 });
 
-it('carries an optional cover and ratio on a feature item', function () {
+it('carries an optional cover, eyebrow, layout and ratio on a feature item', function () {
     $item = FeatureItemData::from([
         'title' => 'Fast',
+        'pre' => 'New',
         'attachment_uuid' => '9b7c1e2a-4f56-4c3d-8a1b-2e3f4a5b6c7d',
+        'item_layout' => 'right',
+        'max_width' => '32rem',
         'cover_ratio' => 'widescreen',
     ]);
 
-    expect($item->attachment_uuid)->toBe('9b7c1e2a-4f56-4c3d-8a1b-2e3f4a5b6c7d')
-        ->and($item->cover_ratio)->toBe(MediaRatio::Widescreen)
-        // Defaults: no cover, ratio inherits from the block.
-        ->and(FeatureItemData::from(['title' => 'Plain'])->attachment_uuid)->toBeNull()
-        ->and(FeatureItemData::from(['title' => 'Plain'])->cover_ratio)->toBe(MediaRatio::Inherit);
+    expect($item->pre)->toBe('New')
+        ->and($item->attachment_uuid)->toBe('9b7c1e2a-4f56-4c3d-8a1b-2e3f4a5b6c7d')
+        ->and($item->item_layout)->toBe(ItemLayout::Right)
+        ->and($item->max_width)->toBe('32rem')
+        ->and($item->cover_ratio)->toBe(MediaRatio::Widescreen);
+
+    // Defaults: no eyebrow/cover, left-aligned, no width cap, ratio inherits from the block.
+    $plain = FeatureItemData::from(['title' => 'Plain']);
+    expect($plain->pre)->toBeNull()
+        ->and($plain->attachment_uuid)->toBeNull()
+        ->and($plain->item_layout)->toBe(ItemLayout::Left)
+        ->and($plain->max_width)->toBeNull()
+        ->and($plain->cover_ratio)->toBe(MediaRatio::Inherit);
 });
 
 it('rejects a feature item attachment_uuid longer than 36 chars', function () {
     FeatureItemData::validate(['title' => 'X', 'attachment_uuid' => str_repeat('a', 37)]);
 })->throws(ValidationException::class);
+
+it('rejects a feature item max_width longer than 32 chars', function () {
+    FeatureItemData::validate(['title' => 'X', 'max_width' => str_repeat('a', 33)]);
+})->throws(ValidationException::class);
+
+it('carries an optional layout, width and ratio on a slide item', function () {
+    $slide = SlideItemData::from([
+        'title' => 'Cover',
+        'attachment_uuid' => '9b7c1e2a-4f56-4c3d-8a1b-2e3f4a5b6c7d',
+        'item_layout' => 'before',
+        'max_width' => '40rem',
+        'cover_ratio' => 'square',
+    ]);
+
+    expect($slide->item_layout)->toBe(ItemLayout::Before)
+        ->and($slide->max_width)->toBe('40rem')
+        ->and($slide->cover_ratio)->toBe(MediaRatio::Square);
+
+    // Defaults: left-aligned, no width cap, ratio inherits from the carousel.
+    $plain = SlideItemData::from(['caption' => 'Text only']);
+    expect($plain->item_layout)->toBe(ItemLayout::Left)
+        ->and($plain->max_width)->toBeNull()
+        ->and($plain->cover_ratio)->toBe(MediaRatio::Inherit);
+});
 
 it('round-trips feature item covers through the json props column', function () {
     $page = PublishPage::factory()->create();
