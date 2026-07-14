@@ -2,6 +2,8 @@
 
 namespace OiLab\OiLaravelPublish\Data\Styles;
 
+use OiLab\OiLaravelPublish\Enums\SlideNavPosition;
+use OiLab\OiLaravelPublish\Enums\SlideNavSize;
 use Spatie\LaravelData\Data;
 
 /**
@@ -17,6 +19,8 @@ class SlidesStylesData extends Data
         public BlockStyleData $block = new BlockStyleData,
         public HeadingStyleData $title = new HeadingStyleData,
         public CtasStyleData $ctas = new CtasStyleData,
+        public SlideNavPosition $navPosition = SlideNavPosition::Bottom,
+        public SlideNavSize $navSize = SlideNavSize::Medium,
         public CarouselStyleData $carousel = new CarouselStyleData,
     ) {}
 }

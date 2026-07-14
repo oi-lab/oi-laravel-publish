@@ -4,6 +4,7 @@ namespace OiLab\OiLaravelPublish\Data\Styles;
 
 use OiLab\OiLaravelPublish\Enums\HeadingTag;
 use OiLab\OiLaravelPublish\Enums\HorizontalAlign;
+use OiLab\OiLaravelPublish\Enums\TextScale;
 use Spatie\LaravelData\Data;
 
 /**
@@ -15,6 +16,7 @@ class HeadingStyleData extends Data
 {
     public function __construct(
         public HeadingTag $tag = HeadingTag::H2,
+        public TextScale $size = TextScale::Inherit,
         public HorizontalAlign $align = HorizontalAlign::Left,
     ) {}
 }

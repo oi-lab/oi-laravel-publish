@@ -8,8 +8,12 @@ namespace OiLab\OiLaravelPublish\Enums;
  */
 enum TextScale: string
 {
+    case Xs = 'xs';
     case Sm = 'sm';
     case Base = 'base';
     case Lg = 'lg';
     case Xl = 'xl';
+    case Xxl = '2xl';
+    case Xxxl = '3xl';
+    case Inherit = 'inherit';
 }

@@ -5,6 +5,7 @@ namespace OiLab\OiLaravelPublish\Data\Blocks;
 use OiLab\OiLaravelPublish\Data\CtaData;
 use OiLab\OiLaravelPublish\Data\PropsData;
 use OiLab\OiLaravelPublish\Data\Styles\SlidesStylesData;
+use OiLab\OiLaravelPublish\Enums\SlideNavPosition;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\Min;
 
@@ -31,6 +32,7 @@ class SlidesData extends PropsData
         public array $items = [],
         #[DataCollectionOf(CtaData::class)]
         public array $ctas = [],
+        public SlideNavPosition $navPosition = SlideNavPosition::Bottom,
         public SlidesStylesData $styles = new SlidesStylesData,
     ) {}
 }
