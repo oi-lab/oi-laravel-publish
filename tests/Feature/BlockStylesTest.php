@@ -68,7 +68,7 @@ it('carries a per-breakpoint slide count on a carousel', function () {
 
 it('exposes only the style slots a block can use', function () {
     expect(array_keys(HeroData::from([])->styles->toArray()))
-        ->toBe(['block', 'title', 'excerpt', 'ctas'])
+        ->toBe(['block', 'pre', 'title', 'excerpt', 'ctas'])
         ->and(array_keys(BlockquoteData::from([])->styles->toArray()))
         ->toBe(['block', 'quote', 'ctas'])
         // A FAQ carries no calls to action and no list styling.
