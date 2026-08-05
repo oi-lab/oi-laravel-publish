@@ -3,12 +3,12 @@
 namespace OiLab\OiLaravelPublish\Enums;
 
 /**
- * The colour scheme a block renders under. `Custom` hands the decision to the
+ * The colour scheme a block renders under. `System` hands the decision to the
  * host application, which reads its own class or CSS variables.
  */
 enum BlockTheme: string
 {
     case Light = 'light';
     case Dark = 'dark';
-    case Custom = 'custom';
+    case System = 'system';
 }
