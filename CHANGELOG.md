@@ -2,7 +2,9 @@
 
 All notable changes to `oi-lab/oi-laravel-publish` will be documented in this file.
 
-## [Unreleased]
+## [1.8.0] - 2026-08-05
+
+Two shapes change under existing rows: page props are typed from now on, and the `custom` block theme is gone. **Both need the stored props rewritten**; no migration ships with this release.
 
 ### Added
 - **`Data/Pages/PagePropsData`** — page props are typed at last. Both bundled page templates (`default`, `landing`) now declare it as their `propsClass`, so `$page->props` hydrates to a `PagePropsData` instead of the permissive `GenericPropsData` bag. One class is shared by every page template: a page's props describe the page as a whole, which is the same concern whatever the template. A project needing more subclasses it and repoints the template's `propsClass`.
@@ -10,10 +12,14 @@ All notable changes to `oi-lab/oi-laravel-publish` will be documented in this fi
 - **`PublishPage::param()` / `params()`** and `PagePropsData::param()` / `hasParam()` / `paramsMap()` read a param by key. A missing param and one holding null both read as the default — `hasParam()` tells them apart; on a duplicate key the last occurrence wins. The model helpers also read the raw `params` list of a page whose template declares no `propsClass`, so a host template left on the generic bag keeps working.
 - `PublishPageRequest` validates `props.params.*.key` (required, ≤255) and `props.params.*.value` (nullable, ≤2048); `PublishPageFactory::withParams(['key' => 'value'])` seeds them.
 - `publish:install-data` now also copies `ParamData` and `Data/Pages/*` into the host application.
+- **A `story` block** — `StoryData` (+ `StoryItemData`, `StoryStylesData`): a connected sequence of steps laid out along a central rail, each step carrying its own eyebrow, body, icon, cover and layout. The `story` template hydrated `WarrantyData` until now.
+- **`PreStyleData`** — scale and alignment of the kicker above a title, added to `HeroStylesData` as its `pre` slot.
+- **`PublishTemplateData::$requiresName`** — true by default; a template whose body already carries everything it renders sets it to false, and the console stops asking for a name it would never show.
 
 ### Changed
 - **Page props are no longer a free-form bag.** A page on a bundled template only round-trips the keys `PagePropsData` declares — an existing row carrying arbitrary page props loses them on its next save. Move that content into `params`, or keep the loose shape by pointing the template's `propsClass` at a class of your own (or dropping it, which restores `GenericPropsData`).
-- `oi:gen-ts` emits `IPagePropsData` and `IParamData`, and `IPublishPageData.props` as `IPagePropsData | Record<string, unknown>`.
+- **`BlockTheme::Custom` is now `BlockTheme::System`.** The case hands the colour scheme back to the site's own setting, which `custom` suggested the opposite of. Props holding `custom` no longer hydrate.
+- `oi:gen-ts` emits `IPagePropsData`, `IParamData`, `IStoryData`, `IStoryItemData`, `IStoryStylesData` and `IPreStyleData`; `IPublishPageData.props` becomes `IPagePropsData | Record<string, unknown>`, and the block props union gains the story and FAQ shapes — `IFaqsData` was missing from it.
 
 ## [1.2.0] - 2026-07-10
 
