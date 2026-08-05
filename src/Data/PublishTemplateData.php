@@ -15,6 +15,7 @@ use Spatie\LaravelData\Data;
  * @property array<string, mixed> $props Default props seeded onto new pages/blocks using this template.
  * @property class-string<PropsData>|null $propsClass Typed props Data class used by the PropsCast.
  * @property list<string> $allowedBlocks For page templates: the block template keys allowed inside, in suggested order.
+ * @property bool $requiresName Whether a page/block of this template must be given a `name`. False for a template whose body already carries everything it renders.
  */
 class PublishTemplateData extends Data
 {
@@ -30,6 +31,7 @@ class PublishTemplateData extends Data
         public array $props = [],
         public ?string $propsClass = null,
         public array $allowedBlocks = [],
+        public bool $requiresName = true,
     ) {}
 
     public function isPage(): bool
