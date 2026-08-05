@@ -5,6 +5,7 @@ use OiLab\OiLaravelPublish\Data\Blocks\FaqsData;
 use OiLab\OiLaravelPublish\Data\Blocks\FeaturesData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
+use OiLab\OiLaravelPublish\Data\Blocks\StoryData;
 use OiLab\OiLaravelPublish\Data\Styles\HeroStylesData;
 use OiLab\OiLaravelPublish\Enums\BlockHeight;
 use OiLab\OiLaravelPublish\Enums\BlockMarginX;
@@ -71,6 +72,10 @@ it('exposes only the style slots a block can use', function () {
         ->toBe(['block', 'pre', 'title', 'excerpt', 'ctas'])
         ->and(array_keys(BlockquoteData::from([])->styles->toArray()))
         ->toBe(['block', 'quote', 'ctas'])
+        // A story lays its steps out as a list, like a features grid, but on
+        // its own class — the two are free to drift apart.
+        ->and(array_keys(StoryData::from([])->styles->toArray()))
+        ->toBe(['block', 'title', 'excerpt', 'ctas', 'list'])
         // A FAQ carries no calls to action and no list styling.
         ->and(array_keys(FaqsData::from([])->styles->toArray()))
         ->toBe(['block', 'title', 'excerpt']);

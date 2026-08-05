@@ -7,11 +7,13 @@ use OiLab\OiLaravelAttachments\Models\Attachment;
 use OiLab\OiLaravelPublish\Data\Blocks\BlockquoteData;
 use OiLab\OiLaravelPublish\Data\Blocks\BreadcrumbData;
 use OiLab\OiLaravelPublish\Data\Blocks\ContentData;
+use OiLab\OiLaravelPublish\Data\Blocks\FaqsData;
 use OiLab\OiLaravelPublish\Data\Blocks\FeaturesData;
 use OiLab\OiLaravelPublish\Data\Blocks\FormData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\MapData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
+use OiLab\OiLaravelPublish\Data\Blocks\StoryData;
 use OiLab\OiLaravelPublish\Data\Blocks\TableData;
 use OiLab\OiLaravelPublish\Data\Blocks\WarrantyData;
 use OiLab\OiLaravelPublish\Models\PublishBlock;
@@ -44,7 +46,7 @@ use Spatie\LaravelData\Optional;
 class PublishBlockData extends Data
 {
     /**
-     * @param  HeroData|FeaturesData|BlockquoteData|ContentData|FormData|SlidesData|BreadcrumbData|MapData|TableData|WarrantyData|array<string, mixed>  $props
+     * @param  HeroData|FeaturesData|StoryData|BlockquoteData|ContentData|FormData|SlidesData|BreadcrumbData|MapData|TableData|WarrantyData|FaqsData|array<string, mixed>  $props
      * @param  AttachmentData[]|Optional  $slides
      * @param  AttachmentData[]|Optional  $gallery
      */

@@ -2,7 +2,9 @@
 
 use OiLab\OiLaravelPublish\Data\Blocks\ContentData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
+use OiLab\OiLaravelPublish\Data\Blocks\StoryData;
 use OiLab\OiLaravelPublish\Data\GenericPropsData;
+use OiLab\OiLaravelPublish\Data\Styles\StoryStylesData;
 use OiLab\OiLaravelPublish\Enums\HorizontalAlign;
 use OiLab\OiLaravelPublish\Models\PublishBlock;
 use OiLab\OiLaravelPublish\Models\PublishPage;
@@ -30,6 +32,18 @@ it('casts props to the typed class declared by the template', function () {
     expect($block->props)->toBeInstanceOf(HeroData::class)
         ->and($block->props->pre)->not->toBeNull()
         ->and($block->props->styles->title->align)->toBe(HorizontalAlign::Center);
+});
+
+it('casts a story block to its own props rather than the warranty ones', function () {
+    $page = PublishPage::factory()->create();
+    $block = PublishBlock::factory()->forPage($page)->template('story')->create([
+        'props' => ['items' => [['title' => 'Première étape']]],
+    ]);
+    $block->refresh();
+
+    expect($block->props)->toBeInstanceOf(StoryData::class)
+        ->and($block->props->items[0]->title)->toBe('Première étape')
+        ->and($block->props->styles)->toBeInstanceOf(StoryStylesData::class);
 });
 
 it('persists a typed Data object assigned to props', function () {

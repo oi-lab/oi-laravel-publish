@@ -10,9 +10,9 @@ use Spatie\LaravelData\Attributes\Validation\Required;
 use Spatie\LaravelData\Data;
 
 /**
- * A single item inside a "features" block.
+ * A single step inside a "story" block.
  *
- * An item is potentially an eyebrow (`pre`) above its `title`, body `text`, an
+ * A step is potentially an eyebrow (`pre`) above its `title`, body `text`, an
  * `icon`, and an optional cover image. `attachment_uuid` links
  * the item to one entry of the block's `gallery` attachment collection by that
  * attachment's stable `uuid`; it is null for an item with no cover. The host

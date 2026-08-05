@@ -9,6 +9,7 @@ use OiLab\OiLaravelPublish\Data\Blocks\FormData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\MapData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
+use OiLab\OiLaravelPublish\Data\Blocks\StoryData;
 use OiLab\OiLaravelPublish\Data\Blocks\TableData;
 use OiLab\OiLaravelPublish\Data\Blocks\WarrantyData;
 use OiLab\OiLaravelPublish\Data\Pages\PagePropsData;
@@ -242,9 +243,8 @@ return [
             'key' => 'story',
             'name' => 'Histoire',
             'type' => PublishTemplateType::Block->value,
-            'description' => 'An introduction with a cover image and a list of warranty items.',
-            'propsClass' => WarrantyData::class,
-            'props' => ['pre' => ''],
+            'description' => 'A connected sequence of steps laid out along a central rail.',
+            'propsClass' => StoryData::class,
         ],
         [
             'key' => 'faqs',
