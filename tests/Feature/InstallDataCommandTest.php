@@ -19,10 +19,12 @@ function installData(string $target, array $options = []): int
     ]);
 }
 
-it('copies the blocks, styles, enums and CtaData into the target', function () {
+it('copies the blocks, pages, styles, enums, CtaData and ParamData into the target', function () {
     installData($this->target);
 
     expect(File::exists($this->target.'/CtaData.php'))->toBeTrue()
+        ->and(File::exists($this->target.'/ParamData.php'))->toBeTrue()
+        ->and(File::exists($this->target.'/Pages/PagePropsData.php'))->toBeTrue()
         ->and(File::exists($this->target.'/Blocks/HeroData.php'))->toBeTrue()
         ->and(File::exists($this->target.'/Styles/HeroStylesData.php'))->toBeTrue()
         ->and(File::exists($this->target.'/Enums/CtaVariant.php'))->toBeTrue();

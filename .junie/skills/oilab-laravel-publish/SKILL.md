@@ -27,7 +27,11 @@ views; the host application wires the UI (e.g. Inertia/React).
 - **PropsData** — abstract base for typed props. `GenericPropsData` is the
   permissive fallback; typed block props live in `Data/Blocks/*` (HeroData,
   FeaturesData, BlockquoteData, ContentData, FormData, SlidesData,
-  BreadcrumbData, MapData, TableData, WarrantyData, FaqsData).
+  BreadcrumbData, MapData, TableData, WarrantyData, FaqsData), and page props in
+  `Data/Pages/PagePropsData` — one class shared by every page template.
+- **ParamData** — a free-form `key` / `value` pair. `PagePropsData::$params` is
+  an ordered list of them: the escape hatch for what a project alone knows about
+  (tracking id, template variant, external reference).
 - **PropsCast** — casts the JSON `props` column to the typed `PropsData`
   subclass declared by the row's template, falling back to `GenericPropsData`.
 - **CtaData** — a call to action (`label`, `url`, `target`, `variant`, `size`,
@@ -63,8 +67,13 @@ $page = PublishPage::create([
     'template_key' => 'landing',
     'name'  => 'Home',
     'slug'  => 'home',
-    'props' => [],            // GenericPropsData (default template has no propsClass)
+    // PagePropsData: free-form key/value params, the only page-level prop
+    'props' => ['params' => [['key' => 'gtm_id', 'value' => 'GTM-1234']]],
 ]);
+
+$page->param('gtm_id');            // 'GTM-1234' (null-safe, takes a default)
+$page->params();                   // ['gtm_id' => 'GTM-1234']
+$page->props->hasParam('gtm_id');  // true — distinguishes absent from null
 
 $child = PublishPage::create([
     'parent_id'    => $page->id,
@@ -105,6 +114,11 @@ A template's `propsClass` decides how `props` hydrates. To add a new typed
 block, create a `Data/Blocks/<Name>Data` class **extending `PropsData`** and
 point a template's `propsClass` at it in config. Unknown/typeless templates use
 `GenericPropsData`, whose `->value('key', $default)` reads arbitrary keys.
+
+Both bundled page templates share `Data/Pages/PagePropsData`: page props describe
+the page as a whole, the same concern whatever the template. A project needing
+more subclasses it and repoints the template's `propsClass`. `PublishPage::param()`
+/ `params()` read the params either way, typed or from the generic bag.
 
 **Props never carry content.** A block's title, lead and body are its `name`,
 `excerpt` and `description` **columns**. Props hold what is specific to the
@@ -167,8 +181,9 @@ when no store is available.
 - `props` is typed via `PropsData` on the model. For TypeScript, add
   `OiLab\OiLaravelPublish\Data` to `data_namespaces` in `config/oi-laravel-ts.php`:
   `oi:gen-ts` then emits `IPublishPageData`, `IPublishBlockData`, the typed block
-  interfaces (`IHeroData`, ...), `ICtaData`, the `I*StylesData` interfaces, and
-  `IPublishBlockData.props` as the union of the block props.
+  interfaces (`IHeroData`, ...), `IPagePropsData`, `IParamData`, `ICtaData`, the
+  `I*StylesData` interfaces, and `IPublishBlockData.props` as the union of the
+  block props.
 - Style classes are composed, never inherited: `oi-laravel-ts` reads only the
   constructor of the class it reflects, so an inherited property would silently
   vanish from the generated interface.

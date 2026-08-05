@@ -6,9 +6,9 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
 /**
- * Copies the package's block props, style and enum classes into the host
- * application so a project can adapt them — add a block, add a style slot,
- * extend an enum — without forking the package.
+ * Copies the package's page and block props, style and enum classes into the
+ * host application so a project can adapt them — add a block, add a page prop,
+ * add a style slot, extend an enum — without forking the package.
  *
  * The copied files keep extending the package's `PropsData`, so `PropsCast`
  * still hydrates them once `templates.*.propsClass` points at the new classes.
@@ -20,7 +20,7 @@ class InstallDataCommand extends Command
         {--path= : Destination directory (defaults to the namespace mapped under app/)}
         {--force : Overwrite files that already exist}';
 
-    protected $description = 'Publish the block props, style and enum classes into the host application';
+    protected $description = 'Publish the page and block props, style and enum classes into the host application';
 
     /**
      * Enums that stay in the package: they describe the package's own contract,
@@ -80,9 +80,12 @@ class InstallDataCommand extends Command
      */
     private function plan(Filesystem $files, string $source): array
     {
-        $plan = [[$source.'/src/Data/CtaData.php', '']];
+        $plan = [
+            [$source.'/src/Data/CtaData.php', ''],
+            [$source.'/src/Data/ParamData.php', ''],
+        ];
 
-        foreach (['Blocks', 'Styles'] as $directory) {
+        foreach (['Blocks', 'Pages', 'Styles'] as $directory) {
             foreach ($files->files($source.'/src/Data/'.$directory) as $file) {
                 $plan[] = [$file->getPathname(), $directory];
             }
@@ -109,8 +112,10 @@ class InstallDataCommand extends Command
     {
         $replacements = [
             'OiLab\\OiLaravelPublish\\Data\\Blocks' => $namespace.'\\Blocks',
+            'OiLab\\OiLaravelPublish\\Data\\Pages' => $namespace.'\\Pages',
             'OiLab\\OiLaravelPublish\\Data\\Styles' => $namespace.'\\Styles',
             'OiLab\\OiLaravelPublish\\Data\\CtaData' => $namespace.'\\CtaData',
+            'OiLab\\OiLaravelPublish\\Data\\ParamData' => $namespace.'\\ParamData',
             'OiLab\\OiLaravelPublish\\Enums' => $namespace.'\\Enums',
         ];
 

@@ -21,7 +21,7 @@ the `PublishTemplateRegistry`.
     'name'         => 'Hero',
     'type'         => PublishTemplateType::Block->value, // 'page' | 'block'
     'description'  => 'Full-width headline with a call to action.',
-    'propsClass'   => HeroData::class,   // typed props (blocks)
+    'propsClass'   => HeroData::class,   // typed props (pages use PagePropsData)
     'props'        => ['styles' => ['title' => ['align' => 'left']]], // default props
     // page templates may also declare:
     'allowedBlocks' => ['hero', 'features', 'content'],

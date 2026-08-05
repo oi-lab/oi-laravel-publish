@@ -23,8 +23,11 @@ $hero->props;                       // HeroData (template 'hero' declares HeroDa
 $hero->props->pre;                  // typed access
 $hero->props->styles->title->tag;   // HeadingTag::H2
 
-$page->props;             // GenericPropsData (default template, no propsClass)
-$page->props->value('foo', 'default');
+$page->props;                       // PagePropsData (both bundled page templates)
+$page->props->param('gtm_id');      // the value of a free-form page param
+
+$custom->props;                     // GenericPropsData (host template, no propsClass)
+$custom->props->value('foo', 'default');
 ```
 
 `props` accepts either a raw array or a `PropsData` instance on write, and always
@@ -53,6 +56,17 @@ $block->props->pre;   // template-specific: the kicker above the title
 Duplicating a column in props would leave two candidate sources of truth for the
 same string. Where a template genuinely needs a second heading, it names it
 something else — `pre`, on `hero`, `warranty`, and each `features` item.
+
+## Page props
+
+Both bundled page templates point their `propsClass` at the same
+`Data/Pages/PagePropsData`: a page's props describe the page as a whole, which is
+the same concern whatever the template, so there is one class rather than one per
+template. Its single field is `params`, a list of `ParamData` key/value pairs —
+see [Params](./pages.md#params).
+
+A project that needs page props of its own subclasses it (or writes its own
+`PropsData`) and repoints the template's `propsClass`.
 
 ## Bundled typed props
 
@@ -129,8 +143,9 @@ vanish from the generated TypeScript interface without any warning.
 
 ## Adapting the classes in your project
 
-`php artisan publish:install-data` copies the block, style and enum classes into
-your application (`app/Publish/` by default), rewriting their namespaces. The
+`php artisan publish:install-data` copies the page and block props, the style and
+enum classes into your application (`app/Publish/` by default), rewriting their
+namespaces. The
 copies keep extending the package's `PropsData`, so the cast still hydrates them.
 
 ```bash

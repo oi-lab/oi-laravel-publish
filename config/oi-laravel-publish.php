@@ -11,6 +11,7 @@ use OiLab\OiLaravelPublish\Data\Blocks\MapData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
 use OiLab\OiLaravelPublish\Data\Blocks\TableData;
 use OiLab\OiLaravelPublish\Data\Blocks\WarrantyData;
+use OiLab\OiLaravelPublish\Data\Pages\PagePropsData;
 use OiLab\OiLaravelPublish\Enums\PublishTemplateType;
 use OiLab\OiLaravelPublish\Models\PublishBlock;
 use OiLab\OiLaravelPublish\Models\PublishPage;
@@ -115,7 +116,7 @@ return [
     |   type         PublishTemplateType::Page or ::Block
     |   description  optional help text
     |   props        default props applied to new pages/blocks
-    |   propsClass   typed PropsData subclass used by the PropsCast (blocks)
+    |   propsClass   typed PropsData subclass used by the PropsCast
     |   allowedBlocks (page templates) ordered block keys allowed inside
     |
     | Add or override templates here, or at runtime via
@@ -130,9 +131,20 @@ return [
             'name' => 'Default page',
             'type' => PublishTemplateType::Page->value,
             'description' => 'A standard content page composed of ordered blocks.',
+            'propsClass' => PagePropsData::class,
             'allowedBlocks' => [
-                'hero', 'features', 'content', 'blockquote', 'slides',
-                'form', 'breadcrumb', 'map', 'table', 'warranty', 'faqs',
+                'hero',
+                'features',
+                'story',
+                'content',
+                'blockquote',
+                'slides',
+                'form',
+                'map',
+                'table',
+                'warranty',
+                'faqs',
+                'breadcrumb',
             ],
         ],
         [
@@ -140,20 +152,28 @@ return [
             'name' => 'Landing page',
             'type' => PublishTemplateType::Page->value,
             'description' => 'A marketing landing page leading with a hero.',
-            'allowedBlocks' => ['hero', 'features', 'slides', 'content', 'form', 'faqs'],
+            'propsClass' => PagePropsData::class,
+            'allowedBlocks' => [
+                'hero',
+                'features',
+                'slides',
+                'content',
+                'form',
+                'faqs',
+            ],
         ],
 
         // --- Block templates ------------------------------------------------
         [
             'key' => 'hero',
-            'name' => 'Hero',
+            'name' => 'En-tête',
             'type' => PublishTemplateType::Block->value,
             'description' => 'Full-width headline with call to action and cover image.',
             'propsClass' => HeroData::class,
         ],
         [
             'key' => 'features',
-            'name' => 'Features',
+            'name' => 'Fonctionnalités',
             'type' => PublishTemplateType::Block->value,
             'description' => 'A grid of features or selling points.',
             'propsClass' => FeaturesData::class,
@@ -163,21 +183,21 @@ return [
         ],
         [
             'key' => 'blockquote',
-            'name' => 'Blockquote',
+            'name' => 'Citation',
             'type' => PublishTemplateType::Block->value,
             'description' => 'A highlighted quotation with attribution.',
             'propsClass' => BlockquoteData::class,
         ],
         [
             'key' => 'content',
-            'name' => 'Content',
+            'name' => 'Contenu',
             'type' => PublishTemplateType::Block->value,
             'description' => 'Free-form rich text rendered with the configured renderer.',
             'propsClass' => ContentData::class,
         ],
         [
             'key' => 'form',
-            'name' => 'Form',
+            'name' => 'Formulaire',
             'type' => PublishTemplateType::Block->value,
             'description' => 'Embeds a host-application form by key.',
             'propsClass' => FormData::class,
@@ -191,14 +211,14 @@ return [
         ],
         [
             'key' => 'breadcrumb',
-            'name' => 'Breadcrumb',
+            'name' => 'Fil d\'Ariane',
             'type' => PublishTemplateType::Block->value,
             'description' => 'A breadcrumb trail.',
             'propsClass' => BreadcrumbData::class,
         ],
         [
             'key' => 'map',
-            'name' => 'Map',
+            'name' => 'Carte',
             'type' => PublishTemplateType::Block->value,
             'description' => 'A map centred on a coordinate.',
             'propsClass' => MapData::class,
@@ -212,7 +232,15 @@ return [
         ],
         [
             'key' => 'warranty',
-            'name' => 'Warranty',
+            'name' => 'Garanties',
+            'type' => PublishTemplateType::Block->value,
+            'description' => 'An introduction with a cover image and a list of warranty items.',
+            'propsClass' => WarrantyData::class,
+            'props' => ['pre' => ''],
+        ],
+        [
+            'key' => 'story',
+            'name' => 'Histoire',
             'type' => PublishTemplateType::Block->value,
             'description' => 'An introduction with a cover image and a list of warranty items.',
             'propsClass' => WarrantyData::class,

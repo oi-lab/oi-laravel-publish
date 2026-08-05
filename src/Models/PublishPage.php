@@ -16,6 +16,8 @@ use OiLab\OiLaravelAttachments\Concerns\HasCreatorAndUpdater;
 use OiLab\OiLaravelAttachments\Concerns\HasSortable;
 use OiLab\OiLaravelAttachments\Models\Attachment;
 use OiLab\OiLaravelPublish\Casts\PropsCast;
+use OiLab\OiLaravelPublish\Data\Pages\PagePropsData;
+use OiLab\OiLaravelPublish\Data\ParamData;
 use OiLab\OiLaravelPublish\Data\PropsData;
 use OiLab\OiLaravelPublish\Data\PublishPageData;
 use OiLab\OiLaravelPublish\Data\PublishTemplateData;
@@ -132,6 +134,36 @@ class PublishPage extends Model
     public function cover(): MorphOne
     {
         return $this->singleAttachment('cover');
+    }
+
+    /**
+     * Read one of the page's free-form params by key.
+     *
+     * A missing param and a param holding null both read as `$default`.
+     */
+    public function param(string $key, ?string $default = null): ?string
+    {
+        return $this->params()[$key] ?? $default;
+    }
+
+    /**
+     * The page's params, flattened to a `key => value` map.
+     *
+     * Pages whose template declares {@see PagePropsData} answer from their typed
+     * props; one left on the generic bag still has its raw `params` list read,
+     * so a host template without a `propsClass` keeps working.
+     *
+     * @return array<string, string|null>
+     */
+    public function params(): array
+    {
+        if ($this->props instanceof PagePropsData) {
+            return $this->props->paramsMap();
+        }
+
+        $params = $this->props->toProps()['params'] ?? [];
+
+        return is_array($params) ? ParamData::map($params) : [];
     }
 
     /**

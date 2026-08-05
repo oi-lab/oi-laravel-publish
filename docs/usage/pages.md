@@ -43,6 +43,37 @@ Slugs are **unique per parent**, not globally — two pages under different pare
 may share a slug, which suits path-based routing. A duplicate slug under the same
 parent throws a `QueryException`.
 
+## Params
+
+A page's props are typed by `PagePropsData`, whose only field is `params`: an
+ordered list of free-form `key` / `value` pairs. It is the escape hatch a page
+needs for what the project alone knows about — a tracking id, a template
+variant, an external reference — without a migration or a new typed field.
+
+```php
+$home->update(['props' => ['params' => [
+    ['key' => 'gtm_id',  'value' => 'GTM-1234'],
+    ['key' => 'variant', 'value' => 'b'],
+]]]);
+
+$home->param('gtm_id');              // 'GTM-1234'
+$home->param('missing', 'fallback'); // 'fallback'
+$home->params();                     // ['gtm_id' => 'GTM-1234', 'variant' => 'b']
+
+$home->props->param('variant');      // same, straight off the typed props
+$home->props->hasParam('variant');   // true
+$home->props->params[0]->key;        // 'gtm_id' — the hydrated ParamData
+```
+
+Values are nullable strings: params are edited as text in the console, and the
+host casts when it reads one. A missing param and a param holding null both read
+as the default — `hasParam()` tells them apart. On a duplicate key, the last
+occurrence wins.
+
+`PublishPage::param()` / `params()` also read the raw `params` list of a page
+whose template declares no `propsClass`, so a host page template left on the
+generic bag keeps working.
+
 ## Fields
 
 | Field | Type | Notes |

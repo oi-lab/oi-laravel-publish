@@ -10,22 +10,22 @@ use Spatie\LaravelData\Optional;
 
 describe('PublishPageData::fromModel()', function () {
     it('flattens the model typed props into the raw props map', function () {
-        $page = PublishPage::factory()->create(['props' => ['foo' => 'bar']]);
+        $page = PublishPage::factory()->withParams(['gtm_id' => 'GTM-1234'])->create();
 
         $data = PublishPageData::fromModel($page);
 
-        expect($data->props)->toBe(['foo' => 'bar'])
+        expect($data->props)->toBe(['params' => [['key' => 'gtm_id', 'value' => 'GTM-1234']]])
             ->and($data->id)->toBe($page->id)
             ->and($data->slug)->toBe($page->slug);
     });
 
     it('lets spatie build the DTO straight from the model without a TypeError', function () {
-        $page = PublishPage::factory()->create(['props' => ['foo' => 'bar']]);
+        $page = PublishPage::factory()->withParams(['gtm_id' => 'GTM-1234'])->create();
 
         $data = PublishPageData::from($page);
 
         expect($data)->toBeInstanceOf(PublishPageData::class)
-            ->and($data->props)->toBe(['foo' => 'bar']);
+            ->and($data->props)->toBe(['params' => [['key' => 'gtm_id', 'value' => 'GTM-1234']]]);
     });
 
     it('declares the model it maps to, for data_replaces_model introspection', function () {

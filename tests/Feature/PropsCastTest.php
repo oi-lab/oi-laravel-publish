@@ -8,7 +8,12 @@ use OiLab\OiLaravelPublish\Models\PublishBlock;
 use OiLab\OiLaravelPublish\Models\PublishPage;
 
 it('casts props to the generic bag when the template declares no typed class', function () {
-    $page = PublishPage::factory()->create(['props' => ['foo' => 'bar', 'n' => 3]]);
+    typelessPageTemplate('typeless');
+
+    $page = PublishPage::factory()->create([
+        'template_key' => 'typeless',
+        'props' => ['foo' => 'bar', 'n' => 3],
+    ]);
     $page->refresh();
 
     expect($page->props)->toBeInstanceOf(GenericPropsData::class)

@@ -3,6 +3,7 @@
 namespace OiLab\OiLaravelPublish\Data;
 
 use OiLab\OiLaravelAttachments\Data\AttachmentData;
+use OiLab\OiLaravelPublish\Data\Pages\PagePropsData;
 use OiLab\OiLaravelPublish\Models\PublishPage;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
@@ -14,6 +15,12 @@ use Spatie\LaravelData\Optional;
  * flattened props map (from the model's typed PropsData via `toProps()`), so the
  * DTO JSON is uniform regardless of whether the template declares a typed class.
  *
+ * Its shape conforms to the page template's typed props — the `@param` union
+ * below makes oi-laravel-ts emit `props` as `IPagePropsData | Record<string,
+ * unknown>`, the second member covering a host page template that declares no
+ * `propsClass`. That member absorbs the first, so the front end reads
+ * `props as IPagePropsData` once it knows the template is a typed one.
+ *
  * `cover` is an `Optional`: it appears in the JSON only when the relation was
  * eager-loaded. An absent key therefore means "not loaded", where a null value
  * means "loaded, and there is no cover".
@@ -21,7 +28,7 @@ use Spatie\LaravelData\Optional;
 class PublishPageData extends Data
 {
     /**
-     * @param  array<string, mixed>  $props
+     * @param  PagePropsData|array<string, mixed>  $props
      */
     public function __construct(
         public ?int $id,

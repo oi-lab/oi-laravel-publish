@@ -43,6 +43,25 @@ class PublishPageFactory extends Factory
         ]);
     }
 
+    /**
+     * Seed the page's props with free-form params, written as a `key => value`
+     * map for brevity and stored as the ordered list `PagePropsData` expects.
+     *
+     * @param  array<string, string|null>  $params
+     */
+    public function withParams(array $params): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'props' => [
+                'params' => array_map(
+                    fn (string $key, ?string $value): array => ['key' => $key, 'value' => $value],
+                    array_keys($params),
+                    array_values($params),
+                ),
+            ],
+        ]);
+    }
+
     public function inactive(): static
     {
         return $this->state(fn (array $attributes): array => [

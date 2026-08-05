@@ -68,12 +68,13 @@ it('attaches a single cover image', function () {
 });
 
 it('exposes flat props in its data object', function () {
-    $page = PublishPage::factory()->create(['props' => ['foo' => 'bar']]);
+    $page = PublishPage::factory()->withParams(['gtm_id' => 'GTM-1234'])->create();
 
     $data = $page->toData();
+    $flat = ['params' => [['key' => 'gtm_id', 'value' => 'GTM-1234']]];
 
-    expect($data->props)->toBe(['foo' => 'bar'])
-        ->and($data->toArray()['props'])->toBe(['foo' => 'bar']);
+    expect($data->props)->toBe($flat)
+        ->and($data->toArray()['props'])->toBe($flat);
 });
 
 it('soft deletes a page', function () {

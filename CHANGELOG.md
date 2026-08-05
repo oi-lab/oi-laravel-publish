@@ -2,6 +2,19 @@
 
 All notable changes to `oi-lab/oi-laravel-publish` will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- **`Data/Pages/PagePropsData`** — page props are typed at last. Both bundled page templates (`default`, `landing`) now declare it as their `propsClass`, so `$page->props` hydrates to a `PagePropsData` instead of the permissive `GenericPropsData` bag. One class is shared by every page template: a page's props describe the page as a whole, which is the same concern whatever the template. A project needing more subclasses it and repoints the template's `propsClass`.
+- **`ParamData`** — a free-form `key` / `value` pair, and `PagePropsData::$params`, the ordered list of them a page carries: the escape hatch for what a project alone knows about (a tracking id, a template variant, an external reference) without a migration or a typed field per need. `value` is a nullable string; params are edited as text and the host casts when it reads one.
+- **`PublishPage::param()` / `params()`** and `PagePropsData::param()` / `hasParam()` / `paramsMap()` read a param by key. A missing param and one holding null both read as the default — `hasParam()` tells them apart; on a duplicate key the last occurrence wins. The model helpers also read the raw `params` list of a page whose template declares no `propsClass`, so a host template left on the generic bag keeps working.
+- `PublishPageRequest` validates `props.params.*.key` (required, ≤255) and `props.params.*.value` (nullable, ≤2048); `PublishPageFactory::withParams(['key' => 'value'])` seeds them.
+- `publish:install-data` now also copies `ParamData` and `Data/Pages/*` into the host application.
+
+### Changed
+- **Page props are no longer a free-form bag.** A page on a bundled template only round-trips the keys `PagePropsData` declares — an existing row carrying arbitrary page props loses them on its next save. Move that content into `params`, or keep the loose shape by pointing the template's `propsClass` at a class of your own (or dropping it, which restores `GenericPropsData`).
+- `oi:gen-ts` emits `IPagePropsData` and `IParamData`, and `IPublishPageData.props` as `IPagePropsData | Record<string, unknown>`.
+
 ## [1.2.0] - 2026-07-10
 
 Every key of the JSON persisted in the `props` column changes shape. **Existing page and block rows must be rewritten**, and front-end components updated in lockstep. No migration ships with this release — the package is young enough that no production data was assumed.
