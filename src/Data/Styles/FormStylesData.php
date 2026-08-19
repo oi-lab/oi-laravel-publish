@@ -15,7 +15,9 @@ class FormStylesData extends Data
 {
     public function __construct(
         public BlockStyleData $block = new BlockStyleData,
+        public PreStyleData $pre = new PreStyleData,
         public HeadingStyleData $title = new HeadingStyleData,
+        public TextStyleData $excerpt = new TextStyleData,
         public CtasStyleData $ctas = new CtasStyleData,
     ) {}
 }

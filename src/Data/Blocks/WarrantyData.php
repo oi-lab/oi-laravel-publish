@@ -3,6 +3,7 @@
 namespace OiLab\OiLaravelPublish\Data\Blocks;
 
 use OiLab\OiLaravelPublish\Data\CtaData;
+use OiLab\OiLaravelPublish\Data\Items\WarrantyItemData;
 use OiLab\OiLaravelPublish\Data\PropsData;
 use OiLab\OiLaravelPublish\Data\Styles\WarrantyStylesData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;

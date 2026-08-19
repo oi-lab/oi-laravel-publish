@@ -55,7 +55,7 @@ $block->props->pre;   // template-specific: the kicker above the title
 
 Duplicating a column in props would leave two candidate sources of truth for the
 same string. Where a template genuinely needs a second heading, it names it
-something else — `pre`, on `hero`, `warranty`, and each `features` item.
+something else — `pre`, on `hero`, `warranty`, and each `grid` item.
 
 ## Page props
 
@@ -70,7 +70,7 @@ A project that needs page props of its own subclasses it (or writes its own
 
 ## Bundled typed props
 
-`HeroData`, `FeaturesData` (+ `FeatureItemData`), `BlockquoteData`, `ContentData`,
+`HeroData`, `GridData` (+ `GridItemData`), `BlockquoteData`, `ContentData`,
 `FormData`, `SlidesData` (+ `SlideItemData`), `BreadcrumbData`
 (+ `BreadcrumbItemData`), `MapData`, `TableData`, `WarrantyData`
 (+ `WarrantyItemData`), `FaqsData` (+ `FaqItemData`). See the
@@ -113,7 +113,7 @@ has no carousel, a breadcrumb has no calls to action.
 ```php
 $hero->props->styles->block->theme;       // BlockTheme::Light
 $hero->props->styles->title->tag;         // HeadingTag::H2
-$features->props->styles->list->columns;  // BreakpointsData
+$grid->props->styles->list->columns;  // BreakpointsData
 ```
 
 | Slot | Class | Applies to |

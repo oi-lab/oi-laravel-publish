@@ -18,6 +18,8 @@ class HeroStylesData extends Data
         public PreStyleData $pre = new PreStyleData,
         public HeadingStyleData $title = new HeadingStyleData,
         public TextStyleData $excerpt = new TextStyleData,
+        public TextStyleData $body = new TextStyleData,
+        public MediaStyleData $media = new MediaStyleData,
         public CtasStyleData $ctas = new CtasStyleData,
     ) {}
 }

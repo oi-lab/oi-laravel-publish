@@ -26,7 +26,7 @@ views; the host application wires the UI (e.g. Inertia/React).
   `config('oi-laravel-publish.templates')`; extendable at runtime.
 - **PropsData** — abstract base for typed props. `GenericPropsData` is the
   permissive fallback; typed block props live in `Data/Blocks/*` (HeroData,
-  FeaturesData, BlockquoteData, ContentData, FormData, SlidesData,
+  GridData, BlockquoteData, ContentData, FormData, SlidesData,
   BreadcrumbData, MapData, TableData, WarrantyData, FaqsData), and page props in
   `Data/Pages/PagePropsData` — one class shared by every page template.
 - **ParamData** — a free-form `key` / `value` pair. `PagePropsData::$params` is

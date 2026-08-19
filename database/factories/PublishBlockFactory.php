@@ -80,8 +80,8 @@ class PublishBlockFactory extends Factory
             'template_key' => 'faqs',
             'props' => [
                 'items' => [
-                    ['question' => $this->faker->sentence().'?', 'answer' => $this->faker->paragraph()],
-                    ['question' => $this->faker->sentence().'?', 'answer' => $this->faker->paragraph()],
+                    ['title' => $this->faker->sentence().'?', 'text' => $this->faker->paragraph()],
+                    ['title' => $this->faker->sentence().'?', 'text' => $this->faker->paragraph()],
                 ],
             ],
         ]);
@@ -92,10 +92,10 @@ class PublishBlockFactory extends Factory
         return $this->state(fn (array $attributes): array => [
             'template_key' => 'slides',
             'props' => [
-                'media_ratio' => 'widescreen',
+                'styles' => ['media' => ['ratio' => 'widescreen']],
                 'items' => [
-                    ['title' => $this->faker->words(2, true), 'caption' => $this->faker->sentence()],
-                    ['title' => $this->faker->words(2, true), 'caption' => null],
+                    ['title' => $this->faker->words(2, true), 'text' => $this->faker->sentence()],
+                    ['title' => $this->faker->words(2, true), 'text' => null],
                 ],
             ],
         ]);

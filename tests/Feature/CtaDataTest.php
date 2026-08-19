@@ -2,8 +2,8 @@
 
 use Illuminate\Validation\ValidationException;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
-use OiLab\OiLaravelPublish\Data\Blocks\SlideItemData;
 use OiLab\OiLaravelPublish\Data\CtaData;
+use OiLab\OiLaravelPublish\Data\Items\SlideItemData;
 use OiLab\OiLaravelPublish\Enums\CtaPosition;
 use OiLab\OiLaravelPublish\Enums\CtaSize;
 use OiLab\OiLaravelPublish\Enums\CtaTarget;
@@ -58,16 +58,22 @@ it('gives a block an empty ctas collection by default', function () {
     expect(HeroData::from([])->ctas)->toBe([]);
 });
 
-it('carries a single, unpositioned cta on a slide', function () {
+it('carries unpositioned ctas on a slide, like every other element', function () {
+    // A slide used to hold one nullable CtaData of its own, so it could offer
+    // exactly one action and no shared editor could touch it. It holds the same
+    // collection as the rest of the catalogue now — but still has no slot to
+    // place them in, so their `position` stays null and they fall in after the
+    // text.
     $slide = SlideItemData::from([
         'title' => 'One',
-        'cta' => ['label' => 'See', 'url' => '/see'],
+        'ctas' => [['label' => 'See', 'url' => '/see']],
     ]);
 
-    expect($slide->cta)->toBeInstanceOf(CtaData::class)
-        ->and($slide->cta->label)->toBe('See')
-        ->and($slide->cta->position)->toBeNull()
-        ->and(SlideItemData::from(['title' => 'Two'])->cta)->toBeNull();
+    expect($slide->ctas)->toHaveCount(1)
+        ->and($slide->ctas[0])->toBeInstanceOf(CtaData::class)
+        ->and($slide->ctas[0]->label)->toBe('See')
+        ->and($slide->ctas[0]->position)->toBeNull()
+        ->and(SlideItemData::from(['title' => 'Two'])->ctas)->toBe([]);
 });
 
 it('rejects a cta without a label or a url', function () {

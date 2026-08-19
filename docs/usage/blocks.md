@@ -7,7 +7,7 @@ order: 2
 # Blocks
 
 A `PublishBlock` belongs to a single page (`publish_page_id`) and renders one
-piece of content — a hero, a feature grid, a quote, a carousel, and so on. Blocks
+piece of content — a hero, a grid, a quote, a carousel, and so on. Blocks
 are a **flat, ordered list** per page (ordered by `sort`); they are not recursive.
 
 ## Creating blocks
@@ -69,7 +69,7 @@ hold what is specific to the template, plus the two cross-cutting keys `ctas` an
 Each block's `styles` object exposes only the slots it can use; see the
 [styles reference](./props.md#styles) for what each slot controls.
 
-Blocks that render a `cover` attachment (`hero`, `features`, `content`) carry a
+Blocks that render a `cover` attachment (`hero`, `grid`, `content`) carry a
 `cover_layout` prop — a `CoverLayout` enum choosing how the image is arranged
 relative to the content: `background`, `before`, `after`, `left`, `right`
 (default `right`).
@@ -86,13 +86,13 @@ Full-width headline with an optional kicker and a cover image.
 - **Media**: `cover` attachment (arranged by `cover_layout`).
 - **Styles**: `block`, `title`, `excerpt`, `ctas`.
 
-### Features — `features`
+### Grid — `grid`
 
-A grid of feature items (`FeatureItemData`).
+A grid of items (`GridItemData`).
 
 | Prop | Type | Notes |
 |------|------|-------|
-| `items` | `FeatureItemData[]` | `title` (req, ≤255), `pre?` (≤255), `text?`, `icon?` (≤255), `attachment_uuid?`, `item_layout`, `max_width?` (≤32), `cover_ratio`, `ctas` |
+| `items` | `GridItemData[]` | `title` (req, ≤255), `pre?` (≤255), `text?`, `icon?` (≤255), `attachment_uuid?`, `item_layout`, `max_width?` (≤32), `cover_ratio`, `ctas` |
 | `cover_layout` | `CoverLayout` | how the block-level cover is arranged (default `right`) |
 | `cover_ratio` | `MediaRatio` | block-level cover aspect ratio (default `inherit`) |
 

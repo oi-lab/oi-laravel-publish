@@ -8,8 +8,8 @@ use OiLab\OiLaravelPublish\Data\Blocks\BlockquoteData;
 use OiLab\OiLaravelPublish\Data\Blocks\BreadcrumbData;
 use OiLab\OiLaravelPublish\Data\Blocks\ContentData;
 use OiLab\OiLaravelPublish\Data\Blocks\FaqsData;
-use OiLab\OiLaravelPublish\Data\Blocks\FeaturesData;
 use OiLab\OiLaravelPublish\Data\Blocks\FormData;
+use OiLab\OiLaravelPublish\Data\Blocks\GridData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\MapData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
@@ -27,7 +27,7 @@ use Spatie\LaravelData\Optional;
  * flattened props map (from the model's typed PropsData via `toProps()`), so the
  * DTO JSON is uniform. Its shape conforms to the block template's typed props —
  * the `@param` union below makes oi-laravel-ts emit `props` as the union of the
- * typed block interfaces (`IHeroData | IFeaturesData | ...`).
+ * typed block interfaces (`IHeroData | IGridData | ...`).
  *
  * `props` never carries content: the title, lead and body of a block are its
  * `name`, `excerpt` and `description` here. Props hold what is specific to the
@@ -46,7 +46,7 @@ use Spatie\LaravelData\Optional;
 class PublishBlockData extends Data
 {
     /**
-     * @param  HeroData|FeaturesData|StoryData|BlockquoteData|ContentData|FormData|SlidesData|BreadcrumbData|MapData|TableData|WarrantyData|FaqsData|array<string, mixed>  $props
+     * @param  HeroData|GridData|StoryData|BlockquoteData|ContentData|FormData|SlidesData|BreadcrumbData|MapData|TableData|WarrantyData|FaqsData|array<string, mixed>  $props
      * @param  AttachmentData[]|Optional  $slides
      * @param  AttachmentData[]|Optional  $gallery
      */

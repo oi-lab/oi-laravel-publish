@@ -5,8 +5,6 @@ namespace OiLab\OiLaravelPublish\Data\Blocks;
 use OiLab\OiLaravelPublish\Data\CtaData;
 use OiLab\OiLaravelPublish\Data\PropsData;
 use OiLab\OiLaravelPublish\Data\Styles\HeroStylesData;
-use OiLab\OiLaravelPublish\Enums\CoverLayout;
-use OiLab\OiLaravelPublish\Enums\MediaRatio;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Attributes\Validation\Nullable;
@@ -16,8 +14,8 @@ use Spatie\LaravelData\Attributes\Validation\Nullable;
  *
  * The title, lead and body come from the block's `name`, `excerpt` and
  * `description` columns — props never duplicate them. The cover image is
- * supplied through the block's `cover` attachment collection; `cover_layout`
- * decides how it is arranged relative to the content.
+ * supplied through the block's `cover` attachment collection; where it sits and
+ * the shape it takes are presentation, and live in `styles.media`.
  */
 class HeroData extends PropsData
 {
@@ -27,8 +25,6 @@ class HeroData extends PropsData
     public function __construct(
         #[Nullable, Max(255)]
         public ?string $pre = null,
-        public CoverLayout $cover_layout = CoverLayout::Right,
-        public MediaRatio $cover_ratio = MediaRatio::Inherit,
         #[DataCollectionOf(CtaData::class)]
         public array $ctas = [],
         public HeroStylesData $styles = new HeroStylesData,

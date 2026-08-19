@@ -9,7 +9,7 @@ use Spatie\LaravelData\Attributes\Validation\Nullable;
 use Spatie\LaravelData\Data;
 
 /**
- * Presentation of a block that repeats items — features, warranty points.
+ * Presentation of a block that repeats items — grid cells, warranty points.
  *
  * `marker_icon` is only read when `marker` is `svg`; it names a file under
  * `public/images/markers/`.

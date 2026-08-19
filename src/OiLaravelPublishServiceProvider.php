@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use OiLab\OiLaravelPublish\Console\Commands\InstallAiSkillCommand;
 use OiLab\OiLaravelPublish\Console\Commands\InstallDataCommand;
 use OiLab\OiLaravelPublish\Console\Commands\InstallSettingsCommand;
+use OiLab\OiLaravelPublish\Console\Commands\MigratePropsCommand;
 use OiLab\OiLaravelPublish\Support\PublishTemplateRegistry;
 use OiLab\OiLaravelPublish\Support\SettingResolver;
 use OiLab\OiLaravelPublish\Support\SettingsInstaller;
@@ -36,6 +37,7 @@ class OiLaravelPublishServiceProvider extends ServiceProvider
                 InstallAiSkillCommand::class,
                 InstallDataCommand::class,
                 InstallSettingsCommand::class,
+                MigratePropsCommand::class,
             ]);
 
             $this->publishes([

@@ -32,8 +32,8 @@ php artisan oi:gen-ts
 ## What gets generated
 
 - `IPublishPageData`, `IPublishBlockData`, `IPublishTemplateData`.
-- Every typed block props interface: `IHeroData`, `IFeaturesData`
-  (+ `IFeatureItemData`), `IBlockquoteData`, `IContentData`, `IFormData`,
+- Every typed block props interface: `IHeroData`, `IGridData`
+  (+ `IGridItemData`), `IBlockquoteData`, `IContentData`, `IFormData`,
   `ISlidesData` (+ `ISlideItemData`), `IBreadcrumbData`
   (+ `IBreadcrumbItemData`), `IMapData`, `ITableData`.
 
@@ -44,7 +44,7 @@ block interfaces (driven by the DTO's `@param` union), so the frontend can narro
 by `template_key`:
 
 ```ts
-props: IHeroData | IFeaturesData | IBlockquoteData | IContentData
+props: IHeroData | IGridData | IBlockquoteData | IContentData
      | IFormData | ISlidesData | IBreadcrumbData | IMapData | ITableData
      | Record<string, unknown>;
 ```

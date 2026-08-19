@@ -2,6 +2,11 @@
 
 All notable changes to `oi-lab/oi-laravel-publish` will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- **The `features` block is now `grid`.** The block templated a grid of items, and only its name said "features" — a `grid` of `story`-shaped items reads for what it is, whatever a project fills it with. The template key `features` becomes `grid`, and its classes follow: `FeaturesData` → `GridData`, `FeatureItemData` → `GridItemData`, `FeaturesStylesData` → `GridStylesData`. `oi:gen-ts` emits `IGridData`, `IGridItemData` and `IGridStylesData` in their place. **Existing rows must be rewritten**: `update publish_blocks set template_key = 'grid' where template_key = 'features'`, and every `allowedBlocks` list naming `features` repointed. No migration ships with this release — the package does not own the host's table content.
+
 ## [1.8.0] - 2026-08-05
 
 Two shapes change under existing rows: page props are typed from now on, and the `custom` block theme is gone. **Both need the stored props rewritten**; no migration ships with this release.

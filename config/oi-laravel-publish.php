@@ -4,14 +4,20 @@ use OiLab\OiLaravelPublish\Data\Blocks\BlockquoteData;
 use OiLab\OiLaravelPublish\Data\Blocks\BreadcrumbData;
 use OiLab\OiLaravelPublish\Data\Blocks\ContentData;
 use OiLab\OiLaravelPublish\Data\Blocks\FaqsData;
-use OiLab\OiLaravelPublish\Data\Blocks\FeaturesData;
 use OiLab\OiLaravelPublish\Data\Blocks\FormData;
+use OiLab\OiLaravelPublish\Data\Blocks\GridData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\MapData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
 use OiLab\OiLaravelPublish\Data\Blocks\StoryData;
 use OiLab\OiLaravelPublish\Data\Blocks\TableData;
 use OiLab\OiLaravelPublish\Data\Blocks\WarrantyData;
+use OiLab\OiLaravelPublish\Data\Items\FaqItemData;
+use OiLab\OiLaravelPublish\Data\Items\GridItemData;
+use OiLab\OiLaravelPublish\Data\Items\MapMarkerData;
+use OiLab\OiLaravelPublish\Data\Items\SlideItemData;
+use OiLab\OiLaravelPublish\Data\Items\StoryItemData;
+use OiLab\OiLaravelPublish\Data\Items\WarrantyItemData;
 use OiLab\OiLaravelPublish\Data\Pages\PagePropsData;
 use OiLab\OiLaravelPublish\Enums\PublishTemplateType;
 use OiLab\OiLaravelPublish\Models\PublishBlock;
@@ -119,6 +125,12 @@ return [
     |   props        default props applied to new pages/blocks
     |   propsClass   typed PropsData subclass used by the PropsCast
     |   allowedBlocks (page templates) ordered block keys allowed inside
+    |   requiresName whether a `name` must be given (defaults to true), and never
+    |                against the capabilities: a block that renders no title
+    |                cannot require a name
+    |   capabilities (block templates) what the block renders — see
+    |                BlockCapabilitiesData. Declared as an associative array, not an
+    |                instance: `config:cache` serialises this file
     |
     | Add or override templates here, or at runtime via
     | OiLaravelPublish::registry()->register(...).
@@ -135,7 +147,7 @@ return [
             'propsClass' => PagePropsData::class,
             'allowedBlocks' => [
                 'hero',
-                'features',
+                'grid',
                 'story',
                 'content',
                 'blockquote',
@@ -156,7 +168,7 @@ return [
             'propsClass' => PagePropsData::class,
             'allowedBlocks' => [
                 'hero',
-                'features',
+                'grid',
                 'slides',
                 'content',
                 'form',
@@ -171,16 +183,18 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'Full-width headline with call to action and cover image.',
             'propsClass' => HeroData::class,
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'body' => true, 'media' => ['cover'], 'ctas' => true],
         ],
         [
-            'key' => 'features',
-            'name' => 'Fonctionnalités',
+            'key' => 'grid',
+            'name' => 'Grille',
             'type' => PublishTemplateType::Block->value,
-            'description' => 'A grid of features or selling points.',
-            'propsClass' => FeaturesData::class,
+            'description' => 'A grid of items or selling points.',
+            'propsClass' => GridData::class,
             // Seeds only what differs from the DTO defaults: one column on mobile,
             // three from the `md` breakpoint up.
             'props' => ['styles' => ['list' => ['columns' => ['base' => 1, 'md' => 3]]]],
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'media' => ['gallery'], 'itemsClass' => GridItemData::class, 'ctas' => true],
         ],
         [
             'key' => 'blockquote',
@@ -188,6 +202,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A highlighted quotation with attribution.',
             'propsClass' => BlockquoteData::class,
+            'capabilities' => ['body' => true, 'ctas' => true],
         ],
         [
             'key' => 'content',
@@ -195,6 +210,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'Free-form rich text rendered with the configured renderer.',
             'propsClass' => ContentData::class,
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'body' => true, 'media' => ['cover'], 'ctas' => true],
         ],
         [
             'key' => 'form',
@@ -202,6 +218,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'Embeds a host-application form by key.',
             'propsClass' => FormData::class,
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'ctas' => true],
         ],
         [
             'key' => 'slides',
@@ -209,6 +226,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A carousel backed by the `slides` attachment collection.',
             'propsClass' => SlidesData::class,
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'media' => ['slides'], 'itemsClass' => SlideItemData::class, 'ctas' => true],
         ],
         [
             'key' => 'breadcrumb',
@@ -216,6 +234,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A breadcrumb trail.',
             'propsClass' => BreadcrumbData::class,
+            'capabilities' => [],
         ],
         [
             'key' => 'map',
@@ -223,6 +242,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A map centred on a coordinate.',
             'propsClass' => MapData::class,
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'itemsClass' => MapMarkerData::class, 'itemsProperty' => 'markers', 'ctas' => true],
         ],
         [
             'key' => 'table',
@@ -230,6 +250,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A simple data table.',
             'propsClass' => TableData::class,
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'ctas' => true],
         ],
         [
             'key' => 'warranty',
@@ -238,6 +259,7 @@ return [
             'description' => 'An introduction with a cover image and a list of warranty items.',
             'propsClass' => WarrantyData::class,
             'props' => ['pre' => ''],
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'media' => ['cover'], 'itemsClass' => WarrantyItemData::class, 'ctas' => true],
         ],
         [
             'key' => 'story',
@@ -245,6 +267,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A connected sequence of steps laid out along a central rail.',
             'propsClass' => StoryData::class,
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'body' => true, 'media' => ['gallery'], 'itemsClass' => StoryItemData::class, 'ctas' => true],
         ],
         [
             'key' => 'faqs',
@@ -252,6 +275,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'A list of questions with markdown answers.',
             'propsClass' => FaqsData::class,
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'itemsClass' => FaqItemData::class, 'ctas' => true],
         ],
     ],
 ];

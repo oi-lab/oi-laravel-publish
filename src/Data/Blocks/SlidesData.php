@@ -3,11 +3,13 @@
 namespace OiLab\OiLaravelPublish\Data\Blocks;
 
 use OiLab\OiLaravelPublish\Data\CtaData;
+use OiLab\OiLaravelPublish\Data\Items\SlideItemData;
 use OiLab\OiLaravelPublish\Data\PropsData;
 use OiLab\OiLaravelPublish\Data\Styles\SlidesStylesData;
-use OiLab\OiLaravelPublish\Enums\MediaRatio;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Attributes\Validation\Min;
+use Spatie\LaravelData\Attributes\Validation\Nullable;
 
 /**
  * Props for a "slides" (carousel) block. Slide images live in the block's
@@ -15,11 +17,11 @@ use Spatie\LaravelData\Attributes\Validation\Min;
  * `attachment_uuid`, so a slide can be text-only (no attachment) without shifting
  * the others.
  *
- * `media_ratio` is the aspect ratio applied to the whole carousel — the same
- * `MediaRatio` the cover blocks use for `cover_ratio`. Autoplay, interval and
- * loop are behaviour, not presentation; how many slides are visible at a
- * breakpoint is a style (`styles.carousel.per_view`), and where the navigation
- * sits is a style too (`styles.nav_position`).
+ * Autoplay, interval and loop are behaviour, and stay here. Everything about the
+ * carousel's appearance is a style: the ratio the whole strip falls back to
+ * (`styles.media.ratio`), how many slides a breakpoint fits
+ * (`styles.carousel.per_view`), and where its navigation sits and how big it is
+ * (`styles.carousel.nav_position`, `styles.carousel.nav_size`).
  */
 class SlidesData extends PropsData
 {
@@ -28,11 +30,12 @@ class SlidesData extends PropsData
      * @param  CtaData[]  $ctas
      */
     public function __construct(
+        #[Nullable, Max(255)]
+        public ?string $pre = null,
         public bool $autoplay = false,
         #[Min(0)]
         public int $interval = 5000,
         public bool $loop = true,
-        public MediaRatio $media_ratio = MediaRatio::Inherit,
         #[DataCollectionOf(SlideItemData::class)]
         public array $items = [],
         #[DataCollectionOf(CtaData::class)]

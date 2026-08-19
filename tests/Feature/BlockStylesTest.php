@@ -2,7 +2,7 @@
 
 use OiLab\OiLaravelPublish\Data\Blocks\BlockquoteData;
 use OiLab\OiLaravelPublish\Data\Blocks\FaqsData;
-use OiLab\OiLaravelPublish\Data\Blocks\FeaturesData;
+use OiLab\OiLaravelPublish\Data\Blocks\GridData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
 use OiLab\OiLaravelPublish\Data\Blocks\StoryData;
@@ -48,16 +48,16 @@ it('overrides only the style keys it is given', function () {
 });
 
 it('carries responsive columns on a list block', function () {
-    $features = FeaturesData::from([
+    $grid = GridData::from([
         'styles' => ['list' => ['columns' => ['base' => 1, 'md' => 2, 'xl' => 4], 'marker' => 'svg', 'marker_icon' => 'check.svg']],
     ]);
 
-    expect($features->styles->list->columns->base)->toBe(1)
-        ->and($features->styles->list->columns->md)->toBe(2)
-        ->and($features->styles->list->columns->lg)->toBeNull()
-        ->and($features->styles->list->columns->xl)->toBe(4)
-        ->and($features->styles->list->marker)->toBe(ListMarker::Svg)
-        ->and($features->styles->list->marker_icon)->toBe('check.svg');
+    expect($grid->styles->list->columns->base)->toBe(1)
+        ->and($grid->styles->list->columns->md)->toBe(2)
+        ->and($grid->styles->list->columns->lg)->toBeNull()
+        ->and($grid->styles->list->columns->xl)->toBe(4)
+        ->and($grid->styles->list->marker)->toBe(ListMarker::Svg)
+        ->and($grid->styles->list->marker_icon)->toBe('check.svg');
 });
 
 it('carries a per-breakpoint slide count on a carousel', function () {
@@ -69,16 +69,17 @@ it('carries a per-breakpoint slide count on a carousel', function () {
 
 it('exposes only the style slots a block can use', function () {
     expect(array_keys(HeroData::from([])->styles->toArray()))
-        ->toBe(['block', 'pre', 'title', 'excerpt', 'ctas'])
+        ->toBe(['block', 'pre', 'title', 'excerpt', 'body', 'media', 'ctas'])
+        // The quotation is the body, and it is served by the `quote` slot.
         ->and(array_keys(BlockquoteData::from([])->styles->toArray()))
         ->toBe(['block', 'quote', 'ctas'])
-        // A story lays its steps out as a list, like a features grid, but on
+        // A story lays its steps out as a list, like a grid, but on
         // its own class — the two are free to drift apart.
         ->and(array_keys(StoryData::from([])->styles->toArray()))
-        ->toBe(['block', 'title', 'excerpt', 'ctas', 'list'])
-        // A FAQ carries no calls to action and no list styling.
+        ->toBe(['block', 'pre', 'title', 'excerpt', 'body', 'media', 'list', 'ctas'])
+        // An accordion is a stack: a FAQ has no list styling to offer.
         ->and(array_keys(FaqsData::from([])->styles->toArray()))
-        ->toBe(['block', 'title', 'excerpt']);
+        ->toBe(['block', 'pre', 'title', 'excerpt', 'ctas']);
 });
 
 it('scales a blockquote typographically', function () {
@@ -89,7 +90,7 @@ it('scales a blockquote typographically', function () {
 
 it('round-trips styles through the json props column', function () {
     $page = PublishPage::factory()->create();
-    $block = PublishBlock::factory()->forPage($page)->template('features')->create([
+    $block = PublishBlock::factory()->forPage($page)->template('grid')->create([
         'props' => ['styles' => ['list' => ['columns' => ['base' => 2]]]],
     ]);
 
@@ -101,7 +102,7 @@ it('round-trips styles through the json props column', function () {
 });
 
 it('seeds the template default columns from config', function () {
-    $template = OiLaravelPublish::template('features');
+    $template = OiLaravelPublish::template('grid');
 
     expect($template->props)->toBe(['styles' => ['list' => ['columns' => ['base' => 1, 'md' => 3]]]]);
 });
@@ -117,19 +118,22 @@ it('hydrates block spacing from snake_case keys', function () {
         ->and($hero->styles->block->space_y)->toBe(BlockSpaceY::Small);
 });
 
-it('hydrates carousel navigation from snake_case keys', function () {
-    $slides = SlidesData::from(['styles' => ['nav_position' => 'top', 'nav_size' => 'large']]);
+it('hydrates carousel navigation from the carousel slot', function () {
+    $slides = SlidesData::from(['styles' => ['carousel' => ['nav_position' => 'top', 'nav_size' => 'large']]]);
 
-    expect($slides->styles->nav_position)->toBe(SlideNavPosition::Top)
-        ->and($slides->styles->nav_size)->toBe(SlideNavSize::Large);
+    expect($slides->styles->carousel->nav_position)->toBe(SlideNavPosition::Top)
+        ->and($slides->styles->carousel->nav_size)->toBe(SlideNavSize::Large);
 });
 
-it('carries a block-level media ratio and no duplicated nav position prop', function () {
-    expect(SlidesData::from([])->media_ratio)->toBe(MediaRatio::Inherit)
-        ->and(SlidesData::from(['media_ratio' => 'widescreen'])->media_ratio)->toBe(MediaRatio::Widescreen)
-        // navPosition is presentation: it lives only in styles now, not in props.
-        ->and(array_keys(SlidesData::from([])->toArray()))->not->toContain('navPosition')
-        ->and(SlidesData::from([])->styles->nav_position)->toBe(SlideNavPosition::Bottom);
+it('keeps every presentation choice of a carousel in its styles', function () {
+    expect(SlidesData::from([])->styles->media->ratio)->toBe(MediaRatio::Inherit)
+        ->and(SlidesData::from(['styles' => ['media' => ['ratio' => 'widescreen']]])->styles->media->ratio)
+        ->toBe(MediaRatio::Widescreen)
+        // The ratio and the navigation are presentation: they live only in
+        // styles now, never beside the props that drive behaviour.
+        ->and(array_keys(SlidesData::from([])->toArray()))
+        ->toBe(['pre', 'autoplay', 'interval', 'loop', 'items', 'ctas', 'styles'])
+        ->and(SlidesData::from([])->styles->carousel->nav_position)->toBe(SlideNavPosition::Bottom);
 });
 
 it('hydrates a per-slide attachment_uuid through the items collection', function () {

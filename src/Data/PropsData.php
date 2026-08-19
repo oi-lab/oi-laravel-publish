@@ -10,7 +10,7 @@ use Spatie\LaravelData\Data;
  *
  * Abstract base for the typed `props` of a page or block. Every concrete props
  * class — the generic {@see GenericPropsData} bag and the typed block props
- * (HeroData, FeaturesData, ...) — extends this class, so the
+ * (HeroData, GridData, ...) — extends this class, so the
  * {@see PropsCast} can declare a single
  * `PropsData` return type. That keeps the cast discoverable by oi-laravel-ts
  * while each subclass still serialises its own fields.

@@ -26,6 +26,8 @@ class FormData extends PropsData
     public function __construct(
         #[Required, Max(255)]
         public string $form_key,
+        #[Nullable, Max(255)]
+        public ?string $pre = null,
         #[Nullable, Max(2048)]
         public ?string $action = null,
         #[Nullable, In(['get', 'post'])]

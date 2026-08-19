@@ -24,7 +24,7 @@ the `PublishTemplateRegistry`.
     'propsClass'   => HeroData::class,   // typed props (pages use PagePropsData)
     'props'        => ['styles' => ['title' => ['align' => 'left']]], // default props
     // page templates may also declare:
-    'allowedBlocks' => ['hero', 'features', 'content'],
+    'allowedBlocks' => ['hero', 'grid', 'content'],
 ],
 ```
 
@@ -44,7 +44,7 @@ OiLaravelPublish::registry()->keys(PublishTemplateType::Block);
 
 Page templates: `default`, `landing`.
 
-Block templates: `hero`, `features`, `blockquote`, `content`, `form`, `slides`,
+Block templates: `hero`, `grid`, `blockquote`, `content`, `form`, `slides`,
 `breadcrumb`, `map`, `table`.
 
 ## Adding templates

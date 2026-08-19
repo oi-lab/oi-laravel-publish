@@ -13,7 +13,7 @@ description: >-
 # Add a Publish Block
 
 Create a new typed block for `oi-lab/oi-laravel-publish` **alongside the existing
-ones** (`hero`, `features`, `warranty`, `content`, `blockquote`, `slides`, `form`,
+ones** (`hero`, `grid`, `warranty`, `content`, `blockquote`, `slides`, `form`,
 `breadcrumb`, `map`, `table`, `faqs`). A block is four coordinated pieces:
 
 1. A typed **`PropsData` subclass** in `src/Data/Blocks/<Name>Data.php` that
@@ -47,7 +47,7 @@ plain numbered list) to collect:
   block's title, lead and body are **columns** (`name`, `excerpt`,
   `description`), never props.
 - **repeatable items?** — does the block hold a list of sub-items (like
-  `features` or `slides`)? If yes, collect the fields of a single item; this
+  `grid` or `slides`)? If yes, collect the fields of a single item; this
   becomes a nested `<Name>ItemData` collection.
 - **styles** — which slots the block can style: `block` (height, alignment,
   theme), `title`, `excerpt`, `description`, `ctas`, `quote`, `list`,
@@ -245,7 +245,7 @@ otherwise):
 
 ```php
 'allowedBlocks' => [
-    'hero', 'features', 'content', 'blockquote', 'slides',
+    'hero', 'grid', 'content', 'blockquote', 'slides',
     'form', 'breadcrumb', 'map', 'table', 'pricing',
 ],
 ```
