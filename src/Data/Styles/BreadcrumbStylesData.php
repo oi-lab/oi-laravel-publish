@@ -14,6 +14,6 @@ use Spatie\LaravelData\Data;
 class BreadcrumbStylesData extends Data
 {
     public function __construct(
-        public BlockStyleData $block = new BlockStyleData,
+        public ?BlockStyleData $block = null,
     ) {}
 }

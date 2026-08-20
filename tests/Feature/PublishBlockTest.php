@@ -88,12 +88,15 @@ it('creates a faqs block with typed props and items', function () {
         ->and($block->props->items[0]->text)->toBeString();
 });
 
-it('defaults the cover layout to the right on the blocks that place one', function () {
-    expect(HeroData::from([])->styles->media->layout)->toBe(CoverLayout::Right)
-        ->and(ContentData::from([])->styles->media->layout)->toBe(CoverLayout::Right)
-        // A grid block has no cover of its own — its images are the pool its
-        // items draw from — so it declares the ratio and no layout at all.
-        ->and(GridData::from([])->styles->media->layout)->toBeNull();
+it('defaults the cover layout to the right when only the ratio is overridden', function () {
+    expect(HeroData::from(['styles' => ['media' => ['ratio' => 'square']]])->styles->media->layout)
+        ->toBe(CoverLayout::Right)
+        ->and(ContentData::from(['styles' => ['media' => ['ratio' => 'square']]])->styles->media->layout)
+        ->toBe(CoverLayout::Right)
+        // A grid block's media is null until overridden, same as every other
+        // block's now — its images are the pool its items draw from, so
+        // nothing in the console ever offers it a layout to set.
+        ->and(GridData::from([])->styles->media)->toBeNull();
 });
 
 it('carries a pre kicker and cover layout on a content block', function () {

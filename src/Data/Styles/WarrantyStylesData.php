@@ -2,7 +2,6 @@
 
 namespace OiLab\OiLaravelPublish\Data\Styles;
 
-use OiLab\OiLaravelPublish\Enums\CoverLayout;
 use Spatie\LaravelData\Data;
 
 /**
@@ -18,12 +17,15 @@ use Spatie\LaravelData\Data;
 class WarrantyStylesData extends Data
 {
     public function __construct(
-        public BlockStyleData $block = new BlockStyleData,
-        public PreStyleData $pre = new PreStyleData,
-        public HeadingStyleData $title = new HeadingStyleData,
-        public TextStyleData $excerpt = new TextStyleData,
-        public MediaStyleData $media = new MediaStyleData(layout: CoverLayout::Before),
-        public ListStyleData $list = new ListStyleData,
-        public CtasStyleData $ctas = new CtasStyleData,
+        public ?BlockSectionStyleData $block = null,
+        public ?BlockAreaStyleData $header_area = null,
+        public ?PreStyleData $pre = null,
+        public ?HeadingStyleData $title = null,
+        public ?TextStyleData $excerpt = null,
+        public ?BlockAreaStyleData $body_area = null,
+        public ?MediaStyleData $media = null,
+        public ?ListStyleData $list = null,
+        public ?CtasStyleData $ctas = null,
+        public ?BlockAreaStyleData $footer_area = null,
     ) {}
 }

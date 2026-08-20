@@ -7,8 +7,7 @@ use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
 use OiLab\OiLaravelPublish\Enums\MediaRatio;
 
 it('types the media ratio of every block that shows an image with the shared enum', function () {
-    expect(HeroData::from([])->styles->media->ratio)->toBe(MediaRatio::Inherit)
-        ->and(HeroData::from(['styles' => ['media' => ['ratio' => 'widescreen']]])->styles->media->ratio)
+    expect(HeroData::from(['styles' => ['media' => ['ratio' => 'widescreen']]])->styles->media->ratio)
         ->toBe(MediaRatio::Widescreen)
         ->and(ContentData::from(['styles' => ['media' => ['ratio' => 'square']]])->styles->media->ratio)
         ->toBe(MediaRatio::Square)

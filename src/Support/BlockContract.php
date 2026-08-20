@@ -60,13 +60,19 @@ final class BlockContract
      * Which capability each style slot answers.
      *
      * `block` answers none: every block is presented, even one that authors
-     * nothing. A slot absent from this map and from the exceptions is a slot
+     * nothing. `header_area`, `body_area` and `footer_area` answer none either,
+     * for the same reason: a block that carries three areas instead of one
+     * `block` slot still needs all three laid out, whatever it renders inside
+     * them. A slot absent from this map and from the exceptions is a slot
      * nobody can explain, which is the point of the check.
      *
      * @var array<string, string>
      */
     private const SLOT_CAPABILITY = [
         'block' => 'always',
+        'header_area' => 'always',
+        'body_area' => 'always',
+        'footer_area' => 'always',
         'pre' => 'pre',
         'title' => 'title',
         'excerpt' => 'excerpt',

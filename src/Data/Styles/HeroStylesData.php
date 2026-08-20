@@ -14,12 +14,12 @@ use Spatie\LaravelData\Data;
 class HeroStylesData extends Data
 {
     public function __construct(
-        public BlockStyleData $block = new BlockStyleData,
-        public PreStyleData $pre = new PreStyleData,
-        public HeadingStyleData $title = new HeadingStyleData,
-        public TextStyleData $excerpt = new TextStyleData,
-        public TextStyleData $body = new TextStyleData,
-        public MediaStyleData $media = new MediaStyleData,
-        public CtasStyleData $ctas = new CtasStyleData,
+        public ?BlockStyleData $block = null,
+        public ?PreStyleData $pre = null,
+        public ?HeadingStyleData $title = null,
+        public ?TextStyleData $excerpt = null,
+        public ?TextStyleData $body = null,
+        public ?MediaStyleData $media = null,
+        public ?CtasStyleData $ctas = null,
     ) {}
 }

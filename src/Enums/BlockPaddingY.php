@@ -3,11 +3,10 @@
 namespace OiLab\OiLaravelPublish\Enums;
 
 /**
- * The vertical gap between a block's stacked children: extra small, small, medium, large, extra large, or none.
+ * The block's inner vertical (top and bottom) padding: small, medium, large, extra large, or none.
  */
-enum BlockSpaceY: string
+enum BlockPaddingY: string
 {
-    case ExtraSmall = 'xs';
     case Small = 'sm';
     case Medium = 'md';
     case Large = 'lg';

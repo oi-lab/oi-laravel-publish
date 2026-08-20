@@ -18,12 +18,15 @@ use Spatie\LaravelData\Data;
 class SlidesStylesData extends Data
 {
     public function __construct(
-        public BlockStyleData $block = new BlockStyleData,
-        public PreStyleData $pre = new PreStyleData,
-        public HeadingStyleData $title = new HeadingStyleData,
-        public TextStyleData $excerpt = new TextStyleData,
-        public MediaStyleData $media = new MediaStyleData(layout: null),
-        public CarouselStyleData $carousel = new CarouselStyleData,
-        public CtasStyleData $ctas = new CtasStyleData,
+        public ?BlockSectionStyleData $block = null,
+        public ?BlockAreaStyleData $header_area = null,
+        public ?PreStyleData $pre = null,
+        public ?HeadingStyleData $title = null,
+        public ?TextStyleData $excerpt = null,
+        public ?BlockAreaStyleData $body_area = null,
+        public ?MediaStyleData $media = null,
+        public ?CarouselStyleData $carousel = null,
+        public ?CtasStyleData $ctas = null,
+        public ?BlockAreaStyleData $footer_area = null,
     ) {}
 }

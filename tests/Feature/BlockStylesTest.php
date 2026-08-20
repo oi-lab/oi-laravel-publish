@@ -24,27 +24,28 @@ use OiLab\OiLaravelPublish\Models\PublishBlock;
 use OiLab\OiLaravelPublish\Models\PublishPage;
 use OiLab\OiLaravelPublish\OiLaravelPublish;
 
-it('gives a block fully populated styles even from an empty props array', function () {
+it('leaves every style slot null from an empty props array, ready to inherit', function () {
     $hero = HeroData::from([]);
 
     expect($hero->styles)->toBeInstanceOf(HeroStylesData::class)
-        ->and($hero->styles->title->tag)->toBe(HeadingTag::H2)
-        ->and($hero->styles->title->align)->toBe(HorizontalAlign::Left)
-        ->and($hero->styles->block->height)->toBe(BlockHeight::Inherit)
-        ->and($hero->styles->block->theme)->toBe(BlockTheme::Light);
+        ->and($hero->styles->title)->toBeNull()
+        ->and($hero->styles->block)->toBeNull()
+        ->and($hero->styles->ctas)->toBeNull();
 });
 
-it('overrides only the style keys it is given', function () {
+it('overrides only the style keys it is given, and leaves an untouched slot null', function () {
     $hero = HeroData::from([
         'styles' => ['title' => ['tag' => 'h1'], 'block' => ['theme' => 'dark']],
     ]);
 
     expect($hero->styles->title->tag)->toBe(HeadingTag::H1)
-        // Untouched sibling keeps its default.
+        // Untouched sibling within the same slot keeps its own default.
         ->and($hero->styles->title->align)->toBe(HorizontalAlign::Left)
         ->and($hero->styles->block->theme)->toBe(BlockTheme::Dark)
         ->and($hero->styles->block->height)->toBe(BlockHeight::Inherit)
-        ->and($hero->styles->ctas->size)->toBe(TextScale::Base);
+        // A slot never mentioned at all stays null — an override is a slot at
+        // a time, not a field at a time.
+        ->and($hero->styles->ctas)->toBeNull();
 });
 
 it('carries responsive columns on a list block', function () {
@@ -68,18 +69,20 @@ it('carries a per-breakpoint slide count on a carousel', function () {
 });
 
 it('exposes only the style slots a block can use', function () {
+    // `hero` is not split into areas: it keeps the single, unsplit `block` slot.
     expect(array_keys(HeroData::from([])->styles->toArray()))
         ->toBe(['block', 'pre', 'title', 'excerpt', 'body', 'media', 'ctas'])
         // The quotation is the body, and it is served by the `quote` slot.
+        // Every other template carries three areas instead of one `block`.
         ->and(array_keys(BlockquoteData::from([])->styles->toArray()))
-        ->toBe(['block', 'quote', 'ctas'])
+        ->toBe(['block', 'header_area', 'body_area', 'quote', 'ctas', 'footer_area'])
         // A story lays its steps out as a list, like a grid, but on
         // its own class — the two are free to drift apart.
         ->and(array_keys(StoryData::from([])->styles->toArray()))
-        ->toBe(['block', 'pre', 'title', 'excerpt', 'body', 'media', 'list', 'ctas'])
+        ->toBe(['block', 'header_area', 'pre', 'title', 'excerpt', 'body_area', 'body', 'media', 'list', 'ctas', 'footer_area'])
         // An accordion is a stack: a FAQ has no list styling to offer.
         ->and(array_keys(FaqsData::from([])->styles->toArray()))
-        ->toBe(['block', 'pre', 'title', 'excerpt', 'ctas']);
+        ->toBe(['block', 'header_area', 'pre', 'title', 'excerpt', 'body_area', 'ctas', 'footer_area']);
 });
 
 it('scales a blockquote typographically', function () {
@@ -126,14 +129,17 @@ it('hydrates carousel navigation from the carousel slot', function () {
 });
 
 it('keeps every presentation choice of a carousel in its styles', function () {
-    expect(SlidesData::from([])->styles->media->ratio)->toBe(MediaRatio::Inherit)
-        ->and(SlidesData::from(['styles' => ['media' => ['ratio' => 'widescreen']]])->styles->media->ratio)
+    expect(SlidesData::from(['styles' => ['media' => ['ratio' => 'widescreen']]])->styles->media->ratio)
         ->toBe(MediaRatio::Widescreen)
         // The ratio and the navigation are presentation: they live only in
         // styles now, never beside the props that drive behaviour.
         ->and(array_keys(SlidesData::from([])->toArray()))
         ->toBe(['pre', 'autoplay', 'interval', 'loop', 'items', 'ctas', 'styles'])
-        ->and(SlidesData::from([])->styles->carousel->nav_position)->toBe(SlideNavPosition::Bottom);
+        ->and(SlidesData::from(['styles' => ['carousel' => ['nav_position' => 'top']]])->styles->carousel->nav_position)
+        ->toBe(SlideNavPosition::Top)
+        // Left untouched, a slide's own carousel styling is null — it inherits
+        // the theme's, not a class default of its own.
+        ->and(SlidesData::from([])->styles->carousel)->toBeNull();
 });
 
 it('hydrates a per-slide attachment_uuid through the items collection', function () {

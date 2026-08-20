@@ -25,7 +25,7 @@ class PropsMigrator
      */
     public function __construct(array $lots = [])
     {
-        $lots = $lots === [] ? [new LotA, new LotB] : $lots;
+        $lots = $lots === [] ? [new LotA, new LotB, new LotC] : $lots;
 
         $this->lots = array_column(
             array_map(static fn (PropsLot $lot): array => [$lot->key(), $lot], $lots),

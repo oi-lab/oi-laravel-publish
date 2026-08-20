@@ -14,8 +14,11 @@ use Spatie\LaravelData\Data;
 class BlockquoteStylesData extends Data
 {
     public function __construct(
-        public BlockStyleData $block = new BlockStyleData,
-        public QuoteStyleData $quote = new QuoteStyleData,
-        public CtasStyleData $ctas = new CtasStyleData,
+        public ?BlockSectionStyleData $block = null,
+        public ?BlockAreaStyleData $header_area = null,
+        public ?BlockAreaStyleData $body_area = null,
+        public ?QuoteStyleData $quote = null,
+        public ?CtasStyleData $ctas = null,
+        public ?BlockAreaStyleData $footer_area = null,
     ) {}
 }

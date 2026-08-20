@@ -14,11 +14,14 @@ use Spatie\LaravelData\Data;
 class TableStylesData extends Data
 {
     public function __construct(
-        public BlockStyleData $block = new BlockStyleData,
-        public PreStyleData $pre = new PreStyleData,
-        public HeadingStyleData $title = new HeadingStyleData,
-        public TextStyleData $excerpt = new TextStyleData,
-        public TableStyleData $table = new TableStyleData,
-        public CtasStyleData $ctas = new CtasStyleData,
+        public ?BlockSectionStyleData $block = null,
+        public ?BlockAreaStyleData $header_area = null,
+        public ?PreStyleData $pre = null,
+        public ?HeadingStyleData $title = null,
+        public ?TextStyleData $excerpt = null,
+        public ?BlockAreaStyleData $body_area = null,
+        public ?TableStyleData $table = null,
+        public ?CtasStyleData $ctas = null,
+        public ?BlockAreaStyleData $footer_area = null,
     ) {}
 }

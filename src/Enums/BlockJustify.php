@@ -12,5 +12,4 @@ enum BlockJustify: string
     case End = 'end';
     case Between = 'between';
     case Around = 'around';
-    case Evenly = 'evenly';
 }

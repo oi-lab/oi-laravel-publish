@@ -184,7 +184,7 @@ it('reports the paths a block changes at', function () {
 it('lists its lots and refuses one it does not know', function () {
     $migrator = new PropsMigrator;
 
-    expect(array_keys($migrator->lots()))->toBe(['A', 'B'])
+    expect(array_keys($migrator->lots()))->toBe(['A', 'B', 'C'])
         ->and($migrator->lot('a'))->toBeInstanceOf(LotA::class)
         ->and($migrator->lot('Z'))->toBeNull();
 });
