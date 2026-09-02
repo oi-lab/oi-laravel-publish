@@ -61,6 +61,14 @@ class BlockCapabilitiesData extends Data
     }
 
     /**
+     * The collections that hold exactly one file: a block's cover, and the video
+     * it plays in place of it.
+     *
+     * @var array<int, string>
+     */
+    private const SINGLE_FILE_COLLECTIONS = ['cover', 'video'];
+
+    /**
      * Whether a collection holds a single file.
      *
      * Cardinality belongs to the collection, not to the template: a `cover` is
@@ -70,6 +78,6 @@ class BlockCapabilitiesData extends Data
      */
     public function isSingleFile(string $collection): bool
     {
-        return $collection === 'cover';
+        return in_array($collection, self::SINGLE_FILE_COLLECTIONS, true);
     }
 }

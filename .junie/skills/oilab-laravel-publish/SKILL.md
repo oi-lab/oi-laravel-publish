@@ -17,7 +17,8 @@ views; the host application wires the UI (e.g. Inertia/React).
   `is_active`. Owns a single `cover` attachment and a `blocks()` collection.
 - **PublishBlock** — an ordered block belonging to one page (`publish_page_id`),
   with `name`, `key`, `excerpt`, `description`, typed `props`, `template_key`,
-  `sort`, `is_active`. Owns `cover` and `slides` attachment collections.
+  `sort`, `is_active`. Owns `cover` and `video` (single-file), `slides` and
+  `gallery` attachment collections.
 - **PublishTemplate** — a *static*, code-defined descriptor (NOT a database
   table). Each template has a `key`, `name`, `type` (`page` | `block`),
   default `props`, an optional typed `propsClass`, and (for page templates) an
@@ -36,6 +37,16 @@ views; the host application wires the UI (e.g. Inertia/React).
   subclass declared by the row's template, falling back to `GenericPropsData`.
 - **CtaData** — a call to action (`label`, `url`, `target`, `variant`, `size`,
   `position`). Every block but `breadcrumb` carries a `ctas` collection of them.
+- **VideoData** — the video a `content` block plays in its media slot, in place
+  of its cover (which then serves as its poster). Led by `source`: `youtube` /
+  `vimeo` hold the `url` an author pasted, `library` holds nothing — the video is
+  the file attached to the block's single-file `video` collection. `title` is how
+  the player is announced; `autoplay`, `loop`, `muted` and `controls` reach the
+  library player alone. `VideoSource::fromUrl()` says which platform an address
+  belongs to, `SupportedVideoSource` refuses one meant for another, and
+  `SilentAutoplay` refuses an audible autoplay. Nothing derived is stored: the
+  video id is extracted, and the player built, by the host's frontend — a console
+  previewing a block as it is typed has no server to ask.
 - **`Data/Styles/*`** — presentation. Each block has its own `*StylesData`
   composing flat primitives (`BlockStyleData`, `HeadingStyleData`,
   `TextStyleData`, `CtasStyleData`, `QuoteStyleData`, `ListStyleData`,

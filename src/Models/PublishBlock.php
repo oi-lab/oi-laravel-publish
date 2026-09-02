@@ -27,7 +27,7 @@ use OiLab\OiLaravelPublish\OiLaravelPublish;
  *
  * An ordered block belonging to a single {@see PublishPage}. It references a
  * code-defined block template by `template_key`, carries typed `props`, and owns
- * `cover`, `slides` and `gallery` attachment collections.
+ * `cover`, `video`, `slides` and `gallery` attachment collections.
  *
  * @property int $id
  * @property string $uuid
@@ -42,6 +42,7 @@ use OiLab\OiLaravelPublish\OiLaravelPublish;
  * @property bool $is_active
  * @property-read PublishPage $page
  * @property-read Attachment|null $cover
+ * @property-read Attachment|null $video
  * @property-read Collection<int, Attachment> $slides
  * @property-read Collection<int, Attachment> $gallery
  */
@@ -116,6 +117,17 @@ class PublishBlock extends Model
     public function cover(): MorphOne
     {
         return $this->singleAttachment('cover');
+    }
+
+    /**
+     * The single `video` attachment for this block: a file of the media library
+     * it plays in place of its cover, which then serves as that video's poster.
+     *
+     * @return MorphOne<Attachment, $this>
+     */
+    public function video(): MorphOne
+    {
+        return $this->singleAttachment('video');
     }
 
     /**

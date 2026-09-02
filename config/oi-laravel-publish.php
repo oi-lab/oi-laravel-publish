@@ -63,9 +63,13 @@ return [
     */
     'attachments' => [
         'page' => ['cover'],
-        'block' => ['cover', 'slides', 'gallery'],
+        'block' => ['cover', 'video', 'slides', 'gallery'],
         'max_files' => 30,
         'max_file_size' => 10240, // kilobytes
+        // A video is measured in tens of megabytes where an image is measured in
+        // hundreds of kilobytes; one ceiling for both would either refuse every
+        // video or accept a 100 MB "image".
+        'max_video_file_size' => 102400, // kilobytes
     ],
 
     /*
@@ -210,7 +214,7 @@ return [
             'type' => PublishTemplateType::Block->value,
             'description' => 'Free-form rich text rendered with the configured renderer.',
             'propsClass' => ContentData::class,
-            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'body' => true, 'media' => ['cover'], 'ctas' => true],
+            'capabilities' => ['pre' => true, 'title' => true, 'excerpt' => true, 'body' => true, 'media' => ['cover', 'video'], 'ctas' => true],
         ],
         [
             'key' => 'form',
