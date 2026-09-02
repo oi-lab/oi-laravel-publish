@@ -26,8 +26,10 @@ use Spatie\LaravelData\Data;
  * its siblings) compose this instead of the full {@see BlockStyleData}: width,
  * margin_x, padding_y, an area's own space_y, items and justify moved to the
  * areas, where a header, a body and a footer can finally differ. `hero`,
- * `breadcrumb` and `reassurance` are not among them — they keep a single
- * {@see BlockStyleData} slot, unsplit, so they keep every field on it.
+ * `breadcrumb` and `reassurance` are the only two not among them — they keep a
+ * single {@see BlockStyleData} slot, unsplit, so they keep every field on it.
+ * `hero` was the third until it split too, keeping its own typography and
+ * nothing else of its old carcass.
  */
 class BlockSectionStyleData extends Data
 {

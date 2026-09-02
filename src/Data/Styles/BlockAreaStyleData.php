@@ -20,8 +20,9 @@ use Spatie\LaravelData\Data;
  * composes {@see BlockSectionStyleData} instead of the full
  * {@see BlockStyleData} for its own section: height, theme and the media gutter
  * stay there, described once for the block rather than once per area.
- * `hero`, `breadcrumb` and `reassurance` keep the single, unsplit
- * {@see BlockStyleData} and never reach for this class.
+ * `breadcrumb` and `reassurance` keep the single, unsplit
+ * {@see BlockStyleData} and never reach for this class. `hero` does reach for
+ * it: it carries the three areas, and draws its own typography inside them.
  *
  * `margin_y` here is not {@see BlockStyleData::$margin_y} /
  * {@see BlockSectionStyleData::$margin_y}: the block's own is the page rhythm

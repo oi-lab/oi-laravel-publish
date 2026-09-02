@@ -135,7 +135,7 @@ it('holds every element class to the closed vocabulary', function (string $key) 
 
 it('reads a block\'s style slots off the class that types them', function () {
     expect(BlockContract::styleSlots(OiLaravelPublish::template('hero')?->propsClass))
-        ->toBe(['block', 'pre', 'title', 'excerpt', 'body', 'media', 'ctas'])
+        ->toBe(['block', 'header_area', 'pre', 'title', 'excerpt', 'body_area', 'body', 'media', 'ctas', 'footer_area'])
         // A block with no props class declares no slots, and no capabilities.
         ->and(BlockContract::styleSlots(null))->toBe([]);
 });

@@ -7,6 +7,7 @@ namespace OiLab\OiLaravelPublish\Enums;
  */
 enum BlockWidth: string
 {
+    case Auto = 'auto';
     case ExtraSmall = 'xs';
     case Small = 'sm';
     case Medium = 'md';

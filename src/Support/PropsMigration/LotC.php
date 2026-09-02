@@ -14,8 +14,9 @@ namespace OiLab\OiLaravelPublish\Support\PropsMigration;
  * each — the same stored value copied to all three, which is exactly what today
  * already renders: one shared value, worn by three regions.
  *
- * `hero`, `breadcrumb` and `reassurance` are not in this lot: they keep the
- * single `styles.block` slot, unsplit.
+ * `hero`, `breadcrumb` and `reassurance` are not in this lot. The hero moved a
+ * lot later, on its own — see {@see LotD}; the other two keep the single
+ * `styles.block` slot, unsplit.
  */
 final class LotC implements PropsLot
 {

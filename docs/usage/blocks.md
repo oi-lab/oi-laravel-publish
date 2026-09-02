@@ -84,7 +84,7 @@ Full-width headline with an optional kicker and a cover image.
 | `cover_layout` | `CoverLayout` | how the cover is arranged (default `right`) |
 
 - **Media**: `cover` attachment (arranged by `cover_layout`).
-- **Styles**: `block`, `title`, `excerpt`, `ctas`.
+- **Styles**: `block` (a `BlockSectionStyleData`), `header_area`, `pre`, `title`, `excerpt`, `body_area`, `body`, `media`, `ctas`, `footer_area` — the hero carries the three structural areas like every other template but `breadcrumb` and `reassurance`.
 
 ### Grid — `grid`
 
@@ -120,10 +120,33 @@ Free-form rich text; the body is the `description` column.
 |------|------|-------|
 | `pre` | string? | kicker shown above the title (≤255) |
 | `format` | `markdown` \| `html` | which renderer the host applies (default `markdown`) |
+| `video` | `VideoData` | a video played in the media slot, in place of the cover |
 | `cover_layout` | `CoverLayout` | how an optional cover is arranged (default `right`) |
 
-- **Media**: optional `cover` attachment (arranged by `cover_layout`).
+- **Media**: optional `cover` attachment (arranged by `cover_layout`), a single
+  `video` attachment, or both — the video takes the media slot and the cover
+  becomes its poster.
 - **Styles**: `block`, `title`, `description`, `ctas`.
+
+`VideoData` is led by its `source`:
+
+| Prop | Type | Notes |
+|------|------|-------|
+| `source` | `VideoSource?` | `youtube`, `vimeo`, `library` — or null for no video |
+| `url` | string? | the address of a platform video; required by, and checked against, the chosen platform |
+| `title` | string? | how the player is announced to a screen reader |
+| `autoplay` | bool | library video only; carries `muted` with it |
+| `loop` | bool | library video only |
+| `muted` | bool | library video only |
+| `controls` | bool | library video only, default true |
+
+A **library** video has no address: it is the file attached to the block's
+`video` collection, played by the browser's own player — which is why the four
+options only reach that source. A **platform** video is an address the author
+pastes; nothing derived is stored, `VideoSource::fromUrl()` only says which
+platform an address belongs to and `SupportedVideoSource` refuses one meant for
+another. The video id is extracted, and the player built, by the host's frontend:
+the console previews a block as it is typed, before anything is saved.
 
 ### Form — `form`
 

@@ -1,18 +1,21 @@
 <?php
 
 use OiLab\OiLaravelPublish\Data\Blocks\BlockquoteData;
+use OiLab\OiLaravelPublish\Data\Blocks\ContentData;
 use OiLab\OiLaravelPublish\Data\Blocks\FaqsData;
 use OiLab\OiLaravelPublish\Data\Blocks\GridData;
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
 use OiLab\OiLaravelPublish\Data\Blocks\SlidesData;
 use OiLab\OiLaravelPublish\Data\Blocks\StoryData;
 use OiLab\OiLaravelPublish\Data\Styles\HeroStylesData;
+use OiLab\OiLaravelPublish\Data\Styles\MediaStyleData;
 use OiLab\OiLaravelPublish\Enums\BlockHeight;
 use OiLab\OiLaravelPublish\Enums\BlockMarginX;
 use OiLab\OiLaravelPublish\Enums\BlockMarginY;
 use OiLab\OiLaravelPublish\Enums\BlockSpaceY;
 use OiLab\OiLaravelPublish\Enums\BlockTheme;
 use OiLab\OiLaravelPublish\Enums\BlockWidth;
+use OiLab\OiLaravelPublish\Enums\CoverLayout;
 use OiLab\OiLaravelPublish\Enums\HeadingTag;
 use OiLab\OiLaravelPublish\Enums\HorizontalAlign;
 use OiLab\OiLaravelPublish\Enums\ListMarker;
@@ -69,9 +72,10 @@ it('carries a per-breakpoint slide count on a carousel', function () {
 });
 
 it('exposes only the style slots a block can use', function () {
-    // `hero` is not split into areas: it keeps the single, unsplit `block` slot.
+    // `hero` carries the three areas too now — `breadcrumb` and `reassurance`
+    // are the only templates left on the single, unsplit `block` slot.
     expect(array_keys(HeroData::from([])->styles->toArray()))
-        ->toBe(['block', 'pre', 'title', 'excerpt', 'body', 'media', 'ctas'])
+        ->toBe(['block', 'header_area', 'pre', 'title', 'excerpt', 'body_area', 'body', 'media', 'ctas', 'footer_area'])
         // The quotation is the body, and it is served by the `quote` slot.
         // Every other template carries three areas instead of one `block`.
         ->and(array_keys(BlockquoteData::from([])->styles->toArray()))
@@ -111,14 +115,17 @@ it('seeds the template default columns from config', function () {
 });
 
 it('hydrates block spacing from snake_case keys', function () {
-    $hero = HeroData::from(['styles' => ['block' => [
-        'width' => 'full', 'margin_x' => 'none', 'margin_y' => 'lg', 'space_y' => 'sm',
-    ]]]);
+    // The block's own slot keeps the page rhythm and the gap between areas; the
+    // column's cap and placement are an area's business now.
+    $hero = HeroData::from(['styles' => [
+        'block' => ['margin_y' => 'lg', 'space_y' => 'sm'],
+        'header_area' => ['width' => 'full', 'margin_x' => 'none'],
+    ]]);
 
-    expect($hero->styles->block->width)->toBe(BlockWidth::Full)
-        ->and($hero->styles->block->margin_x)->toBe(BlockMarginX::None)
-        ->and($hero->styles->block->margin_y)->toBe(BlockMarginY::Large)
-        ->and($hero->styles->block->space_y)->toBe(BlockSpaceY::Small);
+    expect($hero->styles->block->margin_y)->toBe(BlockMarginY::Large)
+        ->and($hero->styles->block->space_y)->toBe(BlockSpaceY::Small)
+        ->and($hero->styles->header_area->width)->toBe(BlockWidth::Full)
+        ->and($hero->styles->header_area->margin_x)->toBe(BlockMarginX::None);
 });
 
 it('hydrates carousel navigation from the carousel slot', function () {
@@ -140,6 +147,30 @@ it('keeps every presentation choice of a carousel in its styles', function () {
         // Left untouched, a slide's own carousel styling is null — it inherits
         // the theme's, not a class default of its own.
         ->and(SlidesData::from([])->styles->carousel)->toBeNull();
+});
+
+it('draws a block’s media full width until an author says otherwise', function () {
+    // The figure used to be full-bleed and nothing else: a video pasted into a
+    // content block spanned the section while the text beside it stopped at
+    // `md`. The defaults have to reproduce that, or every published block moves.
+    $media = ContentData::from([])->styles->media ?? new MediaStyleData;
+
+    expect($media->width)->toBe(BlockWidth::Full)
+        ->and($media->margin_x)->toBe(BlockMarginX::Auto)
+        ->and($media->margin_y)->toBe(BlockMarginY::None);
+});
+
+it('hydrates the media column from snake_case keys', function () {
+    $content = ContentData::from(['styles' => ['media' => [
+        'layout' => 'before', 'ratio' => 'widescreen',
+        'width' => 'md', 'margin_x' => 'left', 'margin_y' => 'lg',
+    ]]]);
+
+    expect($content->styles->media->layout)->toBe(CoverLayout::Before)
+        ->and($content->styles->media->ratio)->toBe(MediaRatio::Widescreen)
+        ->and($content->styles->media->width)->toBe(BlockWidth::Medium)
+        ->and($content->styles->media->margin_x)->toBe(BlockMarginX::Left)
+        ->and($content->styles->media->margin_y)->toBe(BlockMarginY::Large);
 });
 
 it('hydrates a per-slide attachment_uuid through the items collection', function () {
