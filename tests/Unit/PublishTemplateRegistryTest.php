@@ -1,6 +1,7 @@
 <?php
 
 use OiLab\OiLaravelPublish\Data\Blocks\HeroData;
+use OiLab\OiLaravelPublish\Data\Pages\PagePropsData;
 use OiLab\OiLaravelPublish\Data\PublishTemplateData;
 use OiLab\OiLaravelPublish\Enums\PublishTemplateType;
 use OiLab\OiLaravelPublish\OiLaravelPublish;
@@ -58,4 +59,29 @@ it('hydrates from a raw config array', function () {
 
     expect($registry->all())->toHaveCount(2)
         ->and($registry->byType(PublishTemplateType::Block))->toHaveKey('b');
+});
+
+it('maps each block template to its props class, for a discriminated union', function () {
+    $classes = OiLaravelPublish::blockPropsClasses();
+
+    expect($classes['hero'])->toBe(HeroData::class)
+        ->and(array_keys($classes))->toContain('grid', 'content', 'slides', 'warranty', 'faqs')
+        ->and(array_keys($classes))->not->toContain('default', 'landing');
+});
+
+it('maps each page template to its props class', function () {
+    $classes = OiLaravelPublish::pagePropsClasses();
+
+    expect(array_keys($classes))->toBe(['default', 'landing'])
+        ->and($classes['default'])->toBe(PagePropsData::class);
+});
+
+it('leaves a template without a props class out of the map', function () {
+    OiLaravelPublish::registry()->register(PublishTemplateData::from([
+        'key' => 'untyped',
+        'name' => 'Untyped',
+        'type' => PublishTemplateType::Block,
+    ]));
+
+    expect(OiLaravelPublish::blockPropsClasses())->not->toHaveKey('untyped');
 });

@@ -33,11 +33,20 @@ use Spatie\LaravelData\Optional;
  * `name`, `excerpt` and `description` here. Props hold what is specific to the
  * template, plus the two cross-cutting keys `ctas` and `styles`.
  *
- * That union carries no discriminant of its own, and its `array<string, mixed>`
+ * On its own, that union carries no discriminant, and its `array<string, mixed>`
  * member — the shape of a block whose template declares no typed props class —
- * widens to `Record<string, unknown>`, which absorbs every other member. The
- * front end must therefore narrow on `template_key`, the only discriminant, and
- * cast: `props as IHeroData` once `template_key === 'hero'`.
+ * widens to `Record<string, unknown>`, which absorbs every other member. Declare
+ * the DTO in oi-laravel-ts' `data_discriminators` to generate it as a union
+ * discriminated on `template_key` instead, read from the template registry so
+ * the host's own templates are part of it:
+ *
+ *     PublishBlockData::class => [
+ *         'discriminant' => 'template_key',
+ *         'property' => 'props',
+ *         'map' => [OiLaravelPublish::class, 'blockPropsClasses'],
+ *     ],
+ *
+ * `block.template_key === 'hero'` then narrows `block.props` to `IHeroData`.
  *
  * `cover`, `video`, `slides` and `gallery` are `Optional`: they appear in the JSON only when their
  * relation was eager-loaded. An absent key means "not loaded", where a null

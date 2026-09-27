@@ -18,8 +18,10 @@ use Spatie\LaravelData\Optional;
  * Its shape conforms to the page template's typed props — the `@param` union
  * below makes oi-laravel-ts emit `props` as `IPagePropsData | Record<string,
  * unknown>`, the second member covering a host page template that declares no
- * `propsClass`. That member absorbs the first, so the front end reads
- * `props as IPagePropsData` once it knows the template is a typed one.
+ * `propsClass`. That member absorbs the first; declare the DTO in
+ * oi-laravel-ts' `data_discriminators` with
+ * `'map' => [OiLaravelPublish::class, 'pagePropsClasses']` to generate a union
+ * discriminated on `template_key` instead (see {@see PublishBlockData}).
  *
  * `cover` is an `Optional`: it appears in the JSON only when the relation was
  * eager-loaded. An absent key therefore means "not loaded", where a null value

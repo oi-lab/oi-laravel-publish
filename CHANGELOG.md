@@ -2,6 +2,11 @@
 
 All notable changes to `oi-lab/oi-laravel-publish` will be documented in this file.
 
+## [2.1.0] - 2026-09-27
+
+### Added
+- `OiLaravelPublish::blockPropsClasses()` and `pagePropsClasses()`: each template's typed props class, keyed by template key, read from the registry. Shaped for oi-laravel-ts (≥ 1.2) `data_discriminators`, so `PublishBlockData` / `PublishPageData` can be generated as unions discriminated on `template_key` — host templates included — instead of a props union that `Record<string, unknown>` absorbs.
+
 ## [2.0.0] - 2026-09-02
 
 The major of the block styles. A block is no longer one flex column wearing one
